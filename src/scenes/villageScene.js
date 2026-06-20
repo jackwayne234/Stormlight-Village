@@ -60,14 +60,14 @@ export function createVillageScene() {
     prompt: "Water wheel generator offline.",
     guidance: "Power is down near the water wheel. Let's inspect it.",
     completeEffect: "village-lights-on",
-    completeMessage: "Water wheel restored. Opening the path to Glowfen Grove...",
+    completeMessage: "Water wheel restored. Checking Rainbarrel Row next...",
     reactions: [
       { text: "Yay, the lights are back on!", x: 735, y: 292 },
       { text: "Thank you!", x: 1565, y: 310 },
       { text: "We can see again!", x: 1905, y: 326 },
       { text: "Power restored. Nice work.", x: "robot", y: "robotTop", kind: "robot" }
     ],
-    nextScene: "glow-grove"
+    nextScene: "rainbarrel-row"
   };
 
   return scene;

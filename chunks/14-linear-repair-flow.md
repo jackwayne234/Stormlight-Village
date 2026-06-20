@@ -17,11 +17,12 @@ This keeps the first playable version small while leaving room to add richer puz
 
 | Step | Scene | Broken Thing | Completion Payoff | Next Scene |
 | --- | --- | --- | --- | --- |
-| 1 | Stormlight Village | Water wheel generator | Water wheel repairs and village lights come on | Glowfen Grove |
-| 2 | Glowfen Grove | Glow plant bridge | Bridge/glow plants wake up | Mossline Switchyard |
-| 3 | Mossline Switchyard | Junction line | Switchyard poles, boxes, and lamps come online | Stormedge Rise |
-| 4 | Stormedge Rise | Storm gauge | Gauge stabilizes and the storm softens slightly | Beacon Hill |
-| 5 | Beacon Hill Signal Tower | Beacon signal | Beacon and hill lights restore | Chapter complete |
+| 1 | Stormlight Village | Water wheel generator | Water wheel repairs and village lights come on | Rainbarrel Row |
+| 2 | Rainbarrel Row | Clogged storm drain | Runoff channels flow and barrels stop overflowing | Glowfen Grove |
+| 3 | Glowfen Grove | Glow plant bridge | Bridge/glow plants wake up | Mossline Switchyard |
+| 4 | Mossline Switchyard | Junction line | Switchyard poles, boxes, and lamps come online | Stormedge Rise |
+| 5 | Stormedge Rise | Storm gauge | Gauge stabilizes and the storm softens slightly | Beacon Hill |
+| 6 | Beacon Hill Signal Tower | Beacon signal | Beacon and hill lights restore | Chapter complete |
 
 ## Implementation Notes
 
@@ -52,6 +53,7 @@ Each scene now starts with one short robot guidance bubble after a small delay. 
 Current guidance lines:
 
 - Stormlight Village: "Power is down near the water wheel. Let's inspect it."
+- Rainbarrel Row: "Runoff is pooling near the cottages. The drain needs clearing."
 - Glowfen Grove: "The bridge plants are dim. Their circuit might be asleep."
 - Mossline Switchyard: "One junction is offline. I'm reading a break ahead."
 - Stormedge Rise: "Wind is rising. The storm gauge needs calibration."

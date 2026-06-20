@@ -18,11 +18,11 @@ This index tracks the project in small chunks so the work stays organized, expan
 | 12 | First pass complete | Add a fifth standalone signal tower scene. | [12-fifth-scene-beacon-hill.md](chunks/12-fifth-scene-beacon-hill.md) |
 | 13 | Drafted | Define scene-by-scene repair puzzle difficulty progression. | [13-puzzle-progression.md](chunks/13-puzzle-progression.md) |
 | 14 | First pass complete | Connect scenes into a linear repair chapter. | [14-linear-repair-flow.md](chunks/14-linear-repair-flow.md) |
-| 15 | First pass complete | Add a sixth standalone stormwater scene. | [15-sixth-scene-rainbarrel-row.md](chunks/15-sixth-scene-rainbarrel-row.md) |
+| 15 | First pass complete | Add Rainbarrel Row and connect it into the route. | [15-sixth-scene-rainbarrel-row.md](chunks/15-sixth-scene-rainbarrel-row.md) |
 
 ## Current Next Step
 
-Play through Chunk 15 and decide where Rainbarrel Row belongs in the larger route.
+Play through the six-scene route and tune the pacing between repairs.
 
 ## Source Documents
 

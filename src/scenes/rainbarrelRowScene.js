@@ -98,14 +98,14 @@ export function createRainbarrelRowScene() {
     prompt: "Storm drain is clogged.",
     guidance: "Runoff is pooling near the cottages. The drain needs clearing.",
     completeEffect: "rainbarrel-drain-clear",
-    completeMessage: "Stormwater redirected. Rainbarrel Row is draining safely.",
-    continueMessage: "Stormwater redirected. Press Space to enjoy the view.",
+    completeMessage: "Stormwater redirected. Continuing toward Glowfen Grove...",
+    continueMessage: "Stormwater redirected. Press Space or walk right to continue.",
     reactions: [
       { text: "No more water at the door!", x: 740, y: 318 },
       { text: "The barrels are behaving again!", x: 1540, y: 326 },
       { text: "Runoff channel restored.", x: "robot", y: "robotTop", kind: "robot" }
     ],
-    nextScene: null
+    nextScene: "glow-grove"
   };
 
   return scene;

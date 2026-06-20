@@ -2,7 +2,7 @@
 
 ## Goal
 
-Add one new standalone walk-around scene focused on stormwater management after heavy rain.
+Add one new walk-around scene focused on stormwater management after heavy rain.
 
 ## Scene Concept
 
@@ -43,4 +43,4 @@ This scene keeps the civil-engineer theme cozy and practical: the player is not 
 - Open directly: `http://localhost:5174/rainbarrel-row.html`
 - Quick test: `http://localhost:5174/rainbarrel-row.html?resetProgress=1&startAtRepair=1`
 
-This scene is currently standalone. It has not yet been placed into the main linear chapter sequence.
+Rainbarrel Row now sits in the main route after Stormlight Village and before Glowfen Grove.
