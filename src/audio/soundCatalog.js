@@ -7,20 +7,20 @@ export const soundCatalog = {
   "weather.thunder.roll": {
     files: ["./assets/audio/weather/rolling-thunder-pixabay.mp3"],
     bus: "weather",
-    volume: 0.62,
+    volume: 0.9,
     cooldown: 8,
     restart: false
   },
   "weather.thunder.fallback": {
     generated: "lowThunder",
     bus: "weather",
-    volume: 0.24,
+    volume: 0.42,
     cooldown: 8
   },
   "weather.transition.thunder": {
     generated: "lowThunder",
     bus: "weather",
-    volume: 0.24,
+    volume: 0.46,
     cooldown: 1.4
   },
   "ui.scan.chirp": {
@@ -46,7 +46,7 @@ export const soundCatalog = {
 export const busDefaults = {
   master: 1,
   ambience: 0.8,
-  weather: 0.85,
+  weather: 1,
   ui: 0.75,
   character: 0.85,
   robot: 0.75,

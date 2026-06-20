@@ -20,7 +20,7 @@ export function createWeatherAudio(getScene, audioManager) {
     entranceThunderPlayed = true;
     audioManager.play("weather.thunder.roll", {
       fallbackId: "weather.thunder.fallback",
-      volume: 0.9
+      volume: 1
     }).catch(() => {});
   }
 
