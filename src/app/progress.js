@@ -1,7 +1,7 @@
 export function resetProgressIfRequested() {
   const params = new URLSearchParams(window.location.search);
 
-  if (!params.has("resetProgress")) {
+  if (!params.has("resetProgress") && !shouldResetForFreshChapterStart(params)) {
     return;
   }
 
@@ -13,6 +13,10 @@ export function resetProgressIfRequested() {
   const query = params.toString();
   const cleanedUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
   window.history.replaceState({}, "", cleanedUrl);
+}
+
+function shouldResetForFreshChapterStart(params) {
+  return document.body.dataset.scene === "village" && !params.has("keepProgress");
 }
 
 export function applySavedProgress(scene) {
