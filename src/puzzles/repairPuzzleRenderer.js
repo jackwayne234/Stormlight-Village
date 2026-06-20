@@ -34,8 +34,8 @@ export function createRepairPuzzleRenderer(canvas, puzzle) {
   }
 
   function render(time) {
-    drawBackground(context, time);
-    drawPanel(context);
+    drawBackground(context, puzzle, time);
+    drawPanel(context, puzzle);
     drawBoard(context, puzzle, layout, time);
     drawSideDetails(context, puzzle, time);
     drawStatus(context, puzzle, time);
@@ -60,14 +60,15 @@ export function createRepairPuzzleRenderer(canvas, puzzle) {
   };
 }
 
-function drawBackground(ctx, time) {
+function drawBackground(ctx, puzzle, time) {
+  const themeColors = getThemeColors(puzzle);
   const gradient = ctx.createLinearGradient(0, 0, 0, 680);
-  gradient.addColorStop(0, colors.backgroundTop);
-  gradient.addColorStop(1, colors.backgroundBottom);
+  gradient.addColorStop(0, themeColors.backgroundTop);
+  gradient.addColorStop(1, themeColors.backgroundBottom);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 960, 680);
 
-  ctx.fillStyle = "rgba(205, 230, 218, 0.11)";
+  ctx.fillStyle = themeColors.mist;
   for (let i = 0; i < 4; i += 1) {
     ctx.beginPath();
     ctx.ellipse((i * 250 + time * 18) % 1120 - 80, 150 + i * 70, 190, 18, 0, 0, Math.PI * 2);
@@ -75,25 +76,28 @@ function drawBackground(ctx, time) {
   }
 }
 
-function drawPanel(ctx) {
-  drawRoundedRect(ctx, 116, 88, 728, 500, 16, colors.panelDark);
-  drawRoundedRect(ctx, 138, 112, 684, 456, 14, colors.panel);
-  drawRoundedRect(ctx, 162, 138, 636, 404, 12, "#4f382b");
+function drawPanel(ctx, puzzle) {
+  const theme = puzzle.theme;
+  const themeColors = getThemeColors(puzzle);
 
-  ctx.strokeStyle = colors.brass;
+  drawRoundedRect(ctx, 116, 88, 728, 500, 16, themeColors.panelDark);
+  drawRoundedRect(ctx, 138, 112, 684, 456, 14, themeColors.panel);
+  drawRoundedRect(ctx, 162, 138, 636, 404, 12, themeColors.boardInset);
+
+  ctx.strokeStyle = themeColors.node;
   ctx.lineWidth = 6;
   ctx.strokeRect(172, 148, 616, 384);
 
-  ctx.fillStyle = "rgba(255, 224, 138, 0.08)";
+  ctx.fillStyle = themeColors.panelGlow;
   ctx.fillRect(178, 154, 604, 372);
 
   ctx.fillStyle = colors.text;
   ctx.font = "800 30px system-ui, sans-serif";
-  ctx.fillText("Lantern Circuit Repair", 178, 72);
+  ctx.fillText(theme.title, 178, 72);
 
   ctx.font = "600 16px system-ui, sans-serif";
   ctx.fillStyle = "rgba(248, 235, 204, 0.75)";
-  ctx.fillText("Rotate the copper paths to carry light from the seed battery to the generator.", 178, 604);
+  wrapText(ctx, theme.instructions, 178, 604, 620, 21);
 }
 
 function drawBoard(ctx, puzzle, layout, time) {
@@ -105,31 +109,33 @@ function drawBoard(ctx, puzzle, layout, time) {
 }
 
 function drawTile(ctx, puzzle, layout, row, col, time) {
+  const themeColors = getThemeColors(puzzle);
   const rect = tileRect(layout, row, col);
   const currentTile = getTile(puzzle, row, col);
   const connected = puzzle.connected.has(tileKey(row, col));
   const selected = puzzle.selected.row === row && puzzle.selected.col === col;
 
-  drawRoundedRect(ctx, rect.x, rect.y, rect.size, rect.size, 10, connected ? colors.tileLit : colors.tile);
+  drawRoundedRect(ctx, rect.x, rect.y, rect.size, rect.size, 10, connected ? themeColors.tileLit : themeColors.tile);
 
-  ctx.strokeStyle = selected ? colors.glow : "rgba(255, 224, 138, 0.25)";
+  ctx.strokeStyle = selected ? themeColors.glow : themeColors.tileStroke;
   ctx.lineWidth = selected ? 5 : 2;
   ctx.strokeRect(rect.x + 5, rect.y + 5, rect.size - 10, rect.size - 10);
 
   if (selected) {
     const pulse = 0.22 + Math.sin(time * 5) * 0.08;
-    ctx.fillStyle = `rgba(255, 224, 138, ${pulse})`;
+    ctx.fillStyle = colorWithAlpha(themeColors.glow, pulse);
     ctx.fillRect(rect.x + 5, rect.y + 5, rect.size - 10, rect.size - 10);
   }
 
-  drawTileContents(ctx, currentTile, rect, connected, time);
+  drawTileContents(ctx, puzzle, currentTile, rect, connected, time);
 }
 
-function drawTileContents(ctx, tile, rect, connected, time) {
+function drawTileContents(ctx, puzzle, tile, rect, connected, time) {
+  const themeColors = getThemeColors(puzzle);
   const centerX = rect.x + rect.size / 2;
   const centerY = rect.y + rect.size / 2;
   const connections = getConnections(tile);
-  const lineColor = connected ? colors.glow : colors.copper;
+  const lineColor = connected ? themeColors.conduitLit : themeColors.conduit;
 
   if (tile.type === "blank") {
     ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
@@ -140,9 +146,9 @@ function drawTileContents(ctx, tile, rect, connected, time) {
   }
 
   if (tile.type === "start") {
-    drawSeedBattery(ctx, centerX, centerY, time);
+    drawStartNode(ctx, puzzle, centerX, centerY, time);
   } else if (tile.type === "output") {
-    drawGeneratorSocket(ctx, centerX, centerY, connected, time);
+    drawOutputNode(ctx, puzzle, centerX, centerY, connected, time);
   }
 
   ctx.strokeStyle = lineColor;
@@ -159,7 +165,7 @@ function drawTileContents(ctx, tile, rect, connected, time) {
   });
   ctx.stroke();
 
-  ctx.fillStyle = connected ? colors.glow : colors.brass;
+  ctx.fillStyle = connected ? themeColors.conduitLit : themeColors.node;
   ctx.beginPath();
   ctx.arc(centerX, centerY, 17, 0, Math.PI * 2);
   ctx.fill();
@@ -171,17 +177,18 @@ function drawTileContents(ctx, tile, rect, connected, time) {
 }
 
 function drawSideDetails(ctx, puzzle, time) {
+  const themeColors = getThemeColors(puzzle);
   const glow = 0.5 + Math.sin(time * 3) * 0.14;
   const robotY = 255 + Math.sin(time * 2.4) * 8;
 
-  ctx.fillStyle = `rgba(143, 217, 240, ${0.2 + glow * 0.12})`;
+  ctx.fillStyle = colorWithAlpha(themeColors.accent, 0.2 + glow * 0.12);
   ctx.beginPath();
   ctx.arc(204, robotY, 64, 0, Math.PI * 2);
   ctx.fill();
 
   drawRoundedRect(ctx, 166, robotY - 25, 76, 54, 20, "#d8e2de");
   drawRoundedRect(ctx, 181, robotY - 14, 46, 25, 9, "#293b40");
-  ctx.fillStyle = colors.robotBlue;
+  ctx.fillStyle = themeColors.accent;
   ctx.beginPath();
   ctx.arc(194, robotY - 2, 4, 0, Math.PI * 2);
   ctx.arc(214, robotY - 2, 4, 0, Math.PI * 2);
@@ -189,7 +196,7 @@ function drawSideDetails(ctx, puzzle, time) {
 
   ctx.fillStyle = colors.text;
   ctx.font = "800 17px system-ui, sans-serif";
-  ctx.fillText(puzzle.completed ? "Circuit complete!" : "Route the glow.", 104, 374);
+  ctx.fillText(puzzle.completed ? puzzle.theme.completedLabel : puzzle.theme.objective, 104, 374);
 
   ctx.fillStyle = "rgba(248, 235, 204, 0.72)";
   ctx.font = "600 14px system-ui, sans-serif";
@@ -197,9 +204,7 @@ function drawSideDetails(ctx, puzzle, time) {
   ctx.fillText("Space or E rotates", 104, 426);
   ctx.fillText("Click tiles too", 104, 448);
 
-  drawVillageHouse(ctx, 804, 176, puzzle.completed, time);
-  drawGear(ctx, 812, 282, time);
-  drawCopperCoil(ctx, 814, 374);
+  drawThemeSideArt(ctx, puzzle, 812, 230, time);
 }
 
 function drawStatus(ctx, puzzle, time) {
@@ -212,7 +217,7 @@ function drawStatus(ctx, puzzle, time) {
   drawRoundedRect(ctx, 267, 524, 426, 54, 10, `rgba(255, 224, 138, ${alpha})`);
   ctx.fillStyle = "#2d2a21";
   ctx.font = "900 22px system-ui, sans-serif";
-  ctx.fillText("Generator linked. Water wheel ready.", 302, 559);
+  ctx.fillText(puzzle.theme.successMessage, 302, 559);
 }
 
 function drawVillageHouse(ctx, x, y, lit, time) {
@@ -248,6 +253,223 @@ function drawVillageHouse(ctx, x, y, lit, time) {
   }
 
   ctx.restore();
+}
+
+function drawThemeSideArt(ctx, puzzle, x, y, time) {
+  if (puzzle.theme.sideDetail === "rainbarrel") {
+    drawDrainSideArt(ctx, x, y, puzzle.completed, time);
+    return;
+  }
+
+  if (puzzle.theme.sideDetail === "grove") {
+    drawGlowPlantSideArt(ctx, x, y, puzzle.completed, time);
+    return;
+  }
+
+  if (puzzle.theme.sideDetail === "switchyard") {
+    drawJunctionSideArt(ctx, x, y, puzzle.completed, time);
+    return;
+  }
+
+  if (puzzle.theme.sideDetail === "gauge") {
+    drawGaugeSideArt(ctx, x, y, puzzle.completed, time);
+    return;
+  }
+
+  if (puzzle.theme.sideDetail === "beacon") {
+    drawBeaconSideArt(ctx, x, y, puzzle.completed, time);
+    return;
+  }
+
+  drawVillageHouse(ctx, 804, 176, puzzle.completed, time);
+  drawGear(ctx, 812, 282, time);
+  drawCopperCoil(ctx, 814, 374);
+}
+
+function drawDrainSideArt(ctx, x, y, complete, time) {
+  drawRainbarrelIcon(ctx, x - 12, y - 30, !complete, time);
+
+  ctx.strokeStyle = complete ? "rgba(189, 238, 230, 0.78)" : "rgba(126, 190, 191, 0.34)";
+  ctx.lineWidth = complete ? 11 : 8;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(x - 70, y + 92);
+  ctx.bezierCurveTo(x - 24, y + 70, x + 26, y + 112, x + 80, y + 86);
+  ctx.stroke();
+
+  ctx.fillStyle = complete ? "#4f6258" : "#43372c";
+  ctx.beginPath();
+  ctx.ellipse(x + 2, y + 116, 58, 20, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = complete ? "rgba(255, 224, 138, 0.58)" : "#2d251f";
+  ctx.lineWidth = 5;
+  for (let i = -2; i <= 2; i += 1) {
+    ctx.beginPath();
+    ctx.moveTo(x + i * 18, y + 102);
+    ctx.lineTo(x + i * 18, y + 130);
+    ctx.stroke();
+  }
+}
+
+function drawRainbarrelIcon(ctx, x, y, overflow, time) {
+  ctx.fillStyle = "#6b4a32";
+  ctx.fillRect(x - 28, y - 34, 56, 78);
+  ctx.fillStyle = "#825d3a";
+  ctx.beginPath();
+  ctx.ellipse(x, y - 34, 28, 9, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#3f2d25";
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(x - 28, y - 8);
+  ctx.lineTo(x + 28, y - 8);
+  ctx.moveTo(x - 28, y + 24);
+  ctx.lineTo(x + 28, y + 24);
+  ctx.stroke();
+
+  ctx.fillStyle = `rgba(126, 190, 191, ${overflow ? 0.82 : 0.4})`;
+  ctx.beginPath();
+  ctx.ellipse(x, y - 36, 22, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (overflow) {
+    ctx.strokeStyle = "rgba(126, 190, 191, 0.62)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(x + 24, y - 28);
+    ctx.bezierCurveTo(x + 38, y - 8, x + 20, y + 18, x + 38, y + 40 + Math.sin(time * 5) * 3);
+    ctx.stroke();
+  }
+}
+
+function drawGlowPlantSideArt(ctx, x, y, complete, time) {
+  ctx.strokeStyle = "#2f5f46";
+  ctx.lineWidth = 7;
+  ctx.beginPath();
+  ctx.moveTo(x, y + 106);
+  ctx.quadraticCurveTo(x - 32, y + 44, x - 62, y + 6);
+  ctx.moveTo(x, y + 106);
+  ctx.quadraticCurveTo(x + 28, y + 50, x + 66, y + 20);
+  ctx.stroke();
+
+  ctx.fillStyle = "#6f985f";
+  ctx.beginPath();
+  ctx.ellipse(x - 68, y, 30, 15, -0.42, 0, Math.PI * 2);
+  ctx.ellipse(x + 72, y + 12, 30, 15, 0.42, 0, Math.PI * 2);
+  ctx.fill();
+
+  const glow = complete ? 0.74 + Math.sin(time * 4) * 0.12 : 0.28;
+  ctx.fillStyle = `rgba(255, 229, 141, ${glow})`;
+  ctx.beginPath();
+  ctx.arc(x, y + 4, complete ? 28 : 18, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawJunctionSideArt(ctx, x, y, complete, time) {
+  drawRoundedRect(ctx, x - 62, y - 34, 124, 92, 8, "#5e4330");
+  ctx.strokeStyle = "#d8aa57";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(x - 50, y - 22, 100, 68);
+  ctx.strokeStyle = complete ? "#ffe08a" : "#c97945";
+  ctx.lineWidth = complete ? 8 : 6;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(x - 34, y + 12);
+  ctx.lineTo(x + 34, y + 12);
+  ctx.moveTo(x - 10, y - 12);
+  ctx.lineTo(x + 14, y + 34);
+  ctx.stroke();
+  if (complete) {
+    ctx.fillStyle = `rgba(255, 224, 138, ${0.48 + Math.sin(time * 5) * 0.08})`;
+    ctx.beginPath();
+    ctx.arc(x, y + 12, 24, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawGaugeSideArt(ctx, x, y, complete, time) {
+  drawRoundedRect(ctx, x - 58, y - 58, 116, 106, 8, "#5e4330");
+  ctx.strokeStyle = "#d8aa57";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(x - 46, y - 46, 92, 82);
+  ctx.strokeStyle = complete ? "#ffe08a" : "#f0d28f";
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.arc(x, y - 2, 32, Math.PI, Math.PI * 2);
+  ctx.stroke();
+  const angle = complete ? -Math.PI / 2 : -0.2 + Math.sin(time * 4) * 0.28;
+  ctx.strokeStyle = "#c97945";
+  ctx.beginPath();
+  ctx.moveTo(x, y - 2);
+  ctx.lineTo(x + Math.cos(angle) * 34, y - 2 + Math.sin(angle) * 34);
+  ctx.stroke();
+}
+
+function drawBeaconSideArt(ctx, x, y, complete, time) {
+  ctx.strokeStyle = "#4b3326";
+  ctx.lineWidth = 9;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(x - 58, y + 112);
+  ctx.lineTo(x - 24, y - 40);
+  ctx.moveTo(x + 58, y + 112);
+  ctx.lineTo(x + 24, y - 40);
+  ctx.moveTo(x - 42, y + 50);
+  ctx.lineTo(x + 42, y + 50);
+  ctx.stroke();
+
+  ctx.fillStyle = "#5e4330";
+  ctx.fillRect(x - 42, y - 74, 84, 42);
+  ctx.strokeStyle = "#d8aa57";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(x - 34, y - 66, 68, 26);
+
+  const glow = complete ? 0.68 + Math.sin(time * 4) * 0.1 : 0.25;
+  ctx.fillStyle = `rgba(255, 224, 138, ${glow})`;
+  ctx.beginPath();
+  ctx.arc(x, y - 52, complete ? 24 : 15, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawStartNode(ctx, puzzle, x, y, time) {
+  if (puzzle.theme.id === "water-routing") {
+    drawRainbarrelIcon(ctx, x, y + 5, false, time);
+    return;
+  }
+
+  drawSeedBattery(ctx, x, y, time);
+}
+
+function drawOutputNode(ctx, puzzle, x, y, connected, time) {
+  if (puzzle.theme.id === "water-routing") {
+    drawDrainIcon(ctx, x, y, connected, time);
+    return;
+  }
+
+  drawGeneratorSocket(ctx, x, y, connected, time);
+}
+
+function drawDrainIcon(ctx, x, y, connected, time) {
+  ctx.fillStyle = connected ? "#4f6258" : "#43372c";
+  ctx.beginPath();
+  ctx.ellipse(x, y, 38, 18, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = connected ? "rgba(189, 238, 230, 0.82)" : "#2d251f";
+  ctx.lineWidth = 5;
+  for (let i = -2; i <= 2; i += 1) {
+    ctx.beginPath();
+    ctx.moveTo(x + i * 13, y - 13);
+    ctx.lineTo(x + i * 13, y + 13);
+    ctx.stroke();
+  }
+  if (connected) {
+    ctx.strokeStyle = `rgba(189, 238, 230, ${0.5 + Math.sin(time * 4) * 0.1})`;
+    ctx.beginPath();
+    ctx.moveTo(x - 26, y + 2);
+    ctx.bezierCurveTo(x - 8, y + 12, x + 8, y - 12, x + 28, y + 2);
+    ctx.stroke();
+  }
 }
 
 function drawSeedBattery(ctx, x, y, time) {
@@ -322,4 +544,48 @@ function drawRoundedRect(ctx, x, y, width, height, radius, fillStyle) {
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
   ctx.fill();
+}
+
+function getThemeColors(puzzle) {
+  return {
+    ...colors,
+    ...puzzle.theme.colors,
+    backgroundTop: puzzle.theme.colors.backgroundTop || colors.backgroundTop,
+    backgroundBottom: puzzle.theme.colors.backgroundBottom || colors.backgroundBottom,
+    mist: puzzle.theme.colors.mist || "rgba(205, 230, 218, 0.11)",
+    panelGlow: puzzle.theme.colors.panelGlow || "rgba(255, 224, 138, 0.08)",
+    tileStroke: puzzle.theme.colors.tileStroke || "rgba(255, 224, 138, 0.25)"
+  };
+}
+
+function colorWithAlpha(color, alpha) {
+  if (!color.startsWith("#") || color.length !== 7) {
+    return color;
+  }
+
+  const red = parseInt(color.slice(1, 3), 16);
+  const green = parseInt(color.slice(3, 5), 16);
+  const blue = parseInt(color.slice(5, 7), 16);
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(" ");
+  let line = "";
+  let currentY = y;
+
+  words.forEach((word) => {
+    const testLine = line ? `${line} ${word}` : word;
+    if (ctx.measureText(testLine).width > maxWidth && line) {
+      ctx.fillText(line, x, currentY);
+      line = word;
+      currentY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  });
+
+  if (line) {
+    ctx.fillText(line, x, currentY);
+  }
 }

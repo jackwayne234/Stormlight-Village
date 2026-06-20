@@ -19,10 +19,11 @@ This index tracks the project in small chunks so the work stays organized, expan
 | 13 | Drafted | Define scene-by-scene repair puzzle difficulty progression. | [13-puzzle-progression.md](chunks/13-puzzle-progression.md) |
 | 14 | First pass complete | Connect scenes into a linear repair chapter. | [14-linear-repair-flow.md](chunks/14-linear-repair-flow.md) |
 | 15 | First pass complete | Add Rainbarrel Row and connect it into the route. | [15-sixth-scene-rainbarrel-row.md](chunks/15-sixth-scene-rainbarrel-row.md) |
+| 16 | First pass complete | Add scene-specific repair puzzle themes. | [16-scene-specific-puzzle-themes.md](chunks/16-scene-specific-puzzle-themes.md) |
 
 ## Current Next Step
 
-Play through the six-scene route and tune the pacing between repairs.
+Play through the six-scene route and tune puzzle difficulty scene by scene.
 
 ## Source Documents
 

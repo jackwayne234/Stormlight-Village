@@ -60,6 +60,7 @@ export function createGlowGroveScene() {
     radius: 230,
     prompt: "Glow plant bridge is asleep.",
     guidance: "The bridge plants are dim. Their circuit might be asleep.",
+    puzzleTheme: "glow-bridge",
     completeEffect: "grove-glow-bridge",
     completeMessage: "Glow bridge awake. Continuing toward Mossline Switchyard...",
     reactions: [

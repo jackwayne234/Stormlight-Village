@@ -59,6 +59,7 @@ export function createVillageScene() {
     radius: 230,
     prompt: "Water wheel generator offline.",
     guidance: "Power is down near the water wheel. Let's inspect it.",
+    puzzleTheme: "lantern-circuit",
     completeEffect: "village-lights-on",
     completeMessage: "Water wheel restored. Checking Rainbarrel Row next...",
     reactions: [

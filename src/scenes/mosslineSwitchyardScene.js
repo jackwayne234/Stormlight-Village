@@ -70,6 +70,7 @@ export function createMosslineSwitchyardScene() {
     radius: 230,
     prompt: "Switchyard junction line is down.",
     guidance: "One junction is offline. I'm reading a break ahead.",
+    puzzleTheme: "junction-line",
     completeEffect: "switchyard-online",
     completeMessage: "Switchyard line restored. Heading toward Stormedge Rise...",
     reactions: [

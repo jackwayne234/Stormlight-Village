@@ -97,6 +97,7 @@ export function createRainbarrelRowScene() {
     radius: 240,
     prompt: "Storm drain is clogged.",
     guidance: "Runoff is pooling near the cottages. The drain needs clearing.",
+    puzzleTheme: "water-routing",
     completeEffect: "rainbarrel-drain-clear",
     completeMessage: "Stormwater redirected. Continuing toward Glowfen Grove...",
     continueMessage: "Stormwater redirected. Press Space or walk right to continue.",

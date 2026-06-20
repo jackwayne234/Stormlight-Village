@@ -83,6 +83,7 @@ export function createStormedgeRiseScene() {
     radius: 230,
     prompt: "Storm gauge is unstable.",
     guidance: "Wind is rising. The storm gauge needs calibration.",
+    puzzleTheme: "storm-gauge",
     completeEffect: "storm-gauge-stable",
     completeMessage: "Storm gauge stabilized. Climbing to Beacon Hill...",
     reactions: [

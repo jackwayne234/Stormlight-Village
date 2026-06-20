@@ -13,10 +13,99 @@ const TILE_CONNECTIONS = {
   turn: ["right", "down"]
 };
 
-export function createRepairPuzzle() {
+const DEFAULT_THEME = {
+  id: "lantern-circuit",
+  title: "Lantern Circuit Repair",
+  instructions: "Rotate the copper paths to carry light from the seed battery to the generator.",
+  objective: "Route the glow.",
+  completedLabel: "Circuit complete!",
+  successMessage: "Generator linked. Water wheel ready.",
+  conduitName: "copper paths",
+  sideDetail: "village",
+  colors: {
+    panel: "#6f5137",
+    panelDark: "#3e2d24",
+    boardInset: "#4f382b",
+    tileLit: "#49675b",
+    conduit: "#c97945",
+    conduitLit: "#ffe08a",
+    node: "#d8aa57",
+    glow: "#ffe08a",
+    accent: "#8fd9f0"
+  }
+};
+
+const PUZZLE_THEMES = {
+  "lantern-circuit": DEFAULT_THEME,
+  "water-routing": {
+    ...DEFAULT_THEME,
+    id: "water-routing",
+    title: "Stormwater Routing",
+    instructions: "Rotate the runoff channels to guide rainwater from the barrels into the storm drain.",
+    objective: "Route the runoff.",
+    completedLabel: "Drainage restored!",
+    successMessage: "Runoff redirected. Drain is clear.",
+    conduitName: "water channels",
+    sideDetail: "rainbarrel",
+    colors: {
+      panel: "#536954",
+      panelDark: "#243934",
+      boardInset: "#324a45",
+      tileLit: "#416b69",
+      conduit: "#7ebebf",
+      conduitLit: "#bdeee6",
+      node: "#d8aa57",
+      glow: "#bdeee6",
+      accent: "#8fd9f0"
+    }
+  },
+  "glow-bridge": {
+    ...DEFAULT_THEME,
+    id: "glow-bridge",
+    title: "Glow Bridge Circuit",
+    instructions: "Rotate the living paths to wake the bridge plants and relight the crossing.",
+    objective: "Wake the bridge.",
+    completedLabel: "Bridge awake!",
+    successMessage: "Glow path linked. Bridge is awake.",
+    sideDetail: "grove"
+  },
+  "junction-line": {
+    ...DEFAULT_THEME,
+    id: "junction-line",
+    title: "Junction Line Repair",
+    instructions: "Rotate the junction paths to reconnect the line through the switchyard.",
+    objective: "Link the line.",
+    completedLabel: "Line restored!",
+    successMessage: "Junction linked. Current is steady.",
+    sideDetail: "switchyard"
+  },
+  "storm-gauge": {
+    ...DEFAULT_THEME,
+    id: "storm-gauge",
+    title: "Storm Gauge Calibration",
+    instructions: "Rotate the signal paths to stabilize the gauge before the next wind surge.",
+    objective: "Calibrate gauge.",
+    completedLabel: "Gauge stable!",
+    successMessage: "Gauge linked. Storm readings stable.",
+    sideDetail: "gauge"
+  },
+  "beacon-signal": {
+    ...DEFAULT_THEME,
+    id: "beacon-signal",
+    title: "Beacon Signal Tune",
+    instructions: "Rotate the signal paths to carry light back up to the hill beacon.",
+    objective: "Tune the beacon.",
+    completedLabel: "Beacon tuned!",
+    successMessage: "Signal linked. Beacon is shining.",
+    sideDetail: "beacon"
+  }
+};
+
+export function createRepairPuzzle(themeId = "lantern-circuit") {
   return {
     rows: 3,
     cols: 3,
+    theme: createPuzzleTheme(themeId),
     selected: { row: 0, col: 1 },
     completed: false,
     tiles: [
@@ -37,6 +126,18 @@ export function createRepairPuzzle() {
       ]
     ],
     connected: new Set()
+  };
+}
+
+function createPuzzleTheme(themeId) {
+  const theme = PUZZLE_THEMES[themeId] || DEFAULT_THEME;
+
+  return {
+    ...theme,
+    colors: {
+      ...DEFAULT_THEME.colors,
+      ...theme.colors
+    }
   };
 }
 

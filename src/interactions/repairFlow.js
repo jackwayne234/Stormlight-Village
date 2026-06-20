@@ -70,7 +70,7 @@ export function createRepairFlow({ scene, player }) {
 
     open = true;
     completionHandled = false;
-    puzzle = createRepairPuzzle();
+    puzzle = createRepairPuzzle(scene.repairTarget.puzzleTheme);
     updateConnections(puzzle);
     renderer = createRepairPuzzleRenderer(ui.canvas, puzzle);
     renderer.resizeForDisplay();

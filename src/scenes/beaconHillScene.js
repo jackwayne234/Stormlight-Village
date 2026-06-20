@@ -86,6 +86,7 @@ export function createBeaconHillScene() {
     radius: 250,
     prompt: "Beacon signal is weak.",
     guidance: "The beacon signal is weak. We're close.",
+    puzzleTheme: "beacon-signal",
     completeEffect: "beacon-on",
     completeMessage: "Beacon restored. First chapter repairs complete.",
     reactions: [
