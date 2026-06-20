@@ -27,5 +27,6 @@ Play through the six-scene route and tune puzzle difficulty scene by scene.
 
 ## Source Documents
 
+- [HANDOVER.md](HANDOVER.md)
 - [25 questions to guide the project.txt](25%20questions%20to%20guide%20the%20project.txt)
 - [video-transcript.txt](video-transcript.txt)

@@ -64,6 +64,7 @@ http://localhost:5174/index.html?resetProgress=1&startAtRepair=1
 ## Project Notes
 
 - [project-index.md](project-index.md)
+- [HANDOVER.md](HANDOVER.md)
 - [25 questions to guide the project.txt](25%20questions%20to%20guide%20the%20project.txt)
 - [chunks/05-first-mockup-build.md](chunks/05-first-mockup-build.md)
 
