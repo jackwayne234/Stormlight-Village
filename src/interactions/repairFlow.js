@@ -24,12 +24,18 @@ export function createRepairFlow({ scene, player }) {
   let guidanceDismissed = completed;
   let guidanceVisible = false;
   let guidanceHideAt = 0;
+  let scanning = false;
+  let scanStartedAt = 0;
+  let scanReadyAt = 0;
+  let currentTime = 0;
 
   if (completed) {
     applyRepairEffect(scene);
   }
 
   function update(time) {
+    currentTime = time;
+
     if (!scene.repairTarget) {
       return;
     }
@@ -49,18 +55,55 @@ export function createRepairFlow({ scene, player }) {
 
     const nearTarget = isNearRepairTarget(scene, player);
     updateGuidance(time, nearTarget);
+
+    if (scanning) {
+      updateScan(time);
+      return;
+    }
+
     ui.prompt.hidden = completed || !nearTarget;
-    ui.prompt.textContent = completed
-      ? ""
-      : `${scene.repairTarget.prompt} Opening repair panel...`;
+    ui.prompt.textContent = completed ? "" : `${scene.repairTarget.prompt} Move closer to inspect.`;
 
     if (nearTarget && !completed) {
-      openPuzzle();
+      startScan(time);
     }
   }
 
   function isOpen() {
-    return open;
+    return open || scanning;
+  }
+
+  function startScan(time) {
+    if (!scene.repairTarget || completed || !isNearRepairTarget(scene, player)) {
+      return;
+    }
+
+    scanning = true;
+    scanStartedAt = time;
+    scanReadyAt = time + 0.72;
+    hideGuidance();
+    ui.prompt.hidden = false;
+    ui.prompt.textContent = `${scene.repairTarget.prompt} Analyzing repair...`;
+    ui.scan.hidden = false;
+    updateScan(time);
+  }
+
+  function updateScan(time) {
+    if (!isNearRepairTarget(scene, player)) {
+      cancelScan();
+      return;
+    }
+
+    positionScan(scene, ui.scan, time - scanStartedAt);
+
+    if (time >= scanReadyAt) {
+      openPuzzle();
+    }
+  }
+
+  function cancelScan() {
+    scanning = false;
+    ui.scan.hidden = true;
   }
 
   function openPuzzle() {
@@ -69,6 +112,7 @@ export function createRepairFlow({ scene, player }) {
     }
 
     open = true;
+    scanning = false;
     completionHandled = false;
     puzzle = createRepairPuzzle(scene.repairTarget.puzzleTheme);
     updateConnections(puzzle);
@@ -77,6 +121,7 @@ export function createRepairFlow({ scene, player }) {
     ui.status.textContent = "Repair panel active";
     ui.overlay.hidden = false;
     ui.prompt.hidden = true;
+    ui.scan.hidden = true;
     hideGuidance();
   }
 
@@ -99,6 +144,7 @@ export function createRepairFlow({ scene, player }) {
     continueReadyAt = time + 4.5;
     continueReady = false;
     hideGuidance();
+    ui.scan.hidden = true;
     celebrationBubbles = createCelebrationBubbles(scene, ui.celebration);
     ui.celebration.hidden = false;
     ui.prompt.hidden = true;
@@ -182,8 +228,8 @@ export function createRepairFlow({ scene, player }) {
       return;
     }
 
-    if (!open && (key === "e" || key === " ")) {
-      openPuzzle();
+    if (!open && !scanning && (key === "e" || key === " ")) {
+      startScan(currentTime);
       return;
     }
 
@@ -256,10 +302,14 @@ function createRepairUi() {
   guidance.className = "repair-guidance repair-bubble repair-bubble-robot";
   guidance.hidden = true;
 
-  overlay.append(canvas, status);
-  document.querySelector(".app-shell").append(prompt, overlay, celebration, guidance);
+  const scan = document.createElement("div");
+  scan.className = "repair-scan";
+  scan.hidden = true;
 
-  return { canvas, celebration, guidance, overlay, prompt, status };
+  overlay.append(canvas, status);
+  document.querySelector(".app-shell").append(prompt, overlay, celebration, guidance, scan);
+
+  return { canvas, celebration, guidance, overlay, prompt, scan, status };
 }
 
 function isNearRepairTarget(scene, player) {
@@ -306,4 +356,22 @@ function positionBubbleAtWorldPoint(scene, element, worldX, worldY) {
 
   element.style.left = `${rect.left + (worldX - cameraX) * scaleX}px`;
   element.style.top = `${rect.top + worldY * scaleY}px`;
+}
+
+function positionScan(scene, element, age) {
+  const canvas = document.querySelector("#game-canvas");
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = rect.width / 1280;
+  const scaleY = rect.height / 720;
+  const cameraX = scene.camera?.x || 0;
+  const target = scene.repairTarget;
+  const screenX = rect.left + (target.x - cameraX) * scaleX;
+  const screenY = rect.top + 560 * scaleY;
+  const size = Math.max(88, Math.min(170, target.radius * 0.68 * scaleX));
+
+  element.style.left = `${screenX}px`;
+  element.style.top = `${screenY}px`;
+  element.style.width = `${size}px`;
+  element.style.height = `${size * 0.45}px`;
+  element.style.setProperty("--scan-progress", Math.min(age / 0.72, 1));
 }

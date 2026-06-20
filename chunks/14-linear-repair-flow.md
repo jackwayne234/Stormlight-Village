@@ -6,10 +6,11 @@ Connect the existing scenes into a simple first chapter:
 
 1. The player starts in Stormlight Village.
 2. Each scene has one broken infrastructure point.
-3. Walking close to the broken point automatically opens the repair puzzle.
-4. Completing the puzzle changes something visible in that scene.
-5. The repaired scene gets a short reward beat with speech bubbles.
-6. The player chooses when to continue to the next scene.
+3. Walking close to the broken point starts a short robot scan.
+4. The repair puzzle opens after the scan beat.
+5. Completing the puzzle changes something visible in that scene.
+6. The repaired scene gets a short reward beat with speech bubbles.
+7. The player chooses when to continue to the next scene.
 
 This keeps the first playable version small while leaving room to add richer puzzles, story notices, and scene transitions later.
 
@@ -36,13 +37,16 @@ This keeps the first playable version small while leaving room to add richer puz
 
 ## Reward Beat
 
-After a repair puzzle is completed:
+Before and after a repair puzzle:
 
-1. The puzzle panel closes.
-2. The repair effect appears in the scene.
-3. Villager/scene speech bubbles appear near the repaired area.
-4. The robot adds a short engineering-style comment.
-5. After a few seconds, the player can press Space, Enter, E, or walk right to continue.
+1. Walking close to the broken object starts an "Analyzing repair..." prompt.
+2. A soft robot scan ring highlights the repair target.
+3. The puzzle panel fades in after the scan beat.
+4. When the puzzle is completed, the panel closes.
+5. The repair effect appears in the scene.
+6. Villager/scene speech bubbles appear near the repaired area.
+7. The robot adds a short engineering-style comment.
+8. After a few seconds, the player can press Space, Enter, E, or walk right to continue.
 
 The first village reward includes cottage comments such as "Yay, the lights are back on!" so the repair feels helpful before the next scene loads.
 

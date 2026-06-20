@@ -2,7 +2,7 @@
 
 Stormlight Village is a cozy 2D side-scrolling game concept about a young apprentice civil engineer repairing a whimsical forest village after a heavy storm.
 
-The current deliverable is a first playable chapter pass: six walk-around scenes connected by automatic repair points, robot guidance, themed repair puzzles, and a short reward beat after each fix.
+The current deliverable is a first playable chapter pass: six walk-around scenes connected by automatic repair points, robot scan transitions, themed repair puzzles, and a short reward beat after each fix.
 
 ## Open Locally
 

@@ -152,6 +152,7 @@ body {
   display: grid;
   place-items: center;
   background: rgba(10, 18, 20, 0.58);
+  animation: repair-overlay-in 0.38s ease both;
 }
 
 .repair-overlay[hidden],
@@ -180,6 +181,41 @@ body {
   font-weight: 800;
   text-shadow: 0 2px 6px rgba(10, 15, 16, 0.72);
   pointer-events: none;
+}
+
+.repair-scan {
+  position: fixed;
+  z-index: 4;
+  border: 2px solid rgba(143, 217, 240, 0.72);
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at center, rgba(143, 217, 240, 0.2), rgba(143, 217, 240, 0.06) 46%, transparent 72%),
+    conic-gradient(from 0deg, rgba(143, 217, 240, 0), rgba(143, 217, 240, 0.68), rgba(143, 217, 240, 0));
+  box-shadow:
+    0 0 18px rgba(143, 217, 240, 0.38),
+    inset 0 0 18px rgba(143, 217, 240, 0.24);
+  opacity: calc(0.55 + var(--scan-progress, 0) * 0.35);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(calc(0.84 + var(--scan-progress, 0) * 0.18));
+  animation: repair-scan-pulse 0.72s ease-in-out infinite alternate;
+}
+
+.repair-scan[hidden] {
+  display: none;
+}
+
+.repair-scan::before,
+.repair-scan::after {
+  content: "";
+  position: absolute;
+  inset: 15%;
+  border: 1px solid rgba(217, 246, 255, 0.5);
+  border-radius: inherit;
+}
+
+.repair-scan::after {
+  inset: 34% 8%;
+  border-color: rgba(255, 224, 138, 0.42);
 }
 
 .repair-celebration {
@@ -249,6 +285,26 @@ body {
   to {
     opacity: 1;
     transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@keyframes repair-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes repair-scan-pulse {
+  from {
+    filter: brightness(0.94);
+  }
+
+  to {
+    filter: brightness(1.18);
   }
 }
 
