@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+
+# Local-only notes or source material that the game does not need at runtime.
+video-transcript.txt
+assets/audio/archive/
+
+# Local server/editor noise.
+.vscode/
+.idea/
+*.log

@@ -1,0 +1,102 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #182327;
+  color: #f7ebcf;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 25%, rgba(255, 218, 137, 0.13), transparent 28rem),
+    linear-gradient(180deg, #22363b 0%, #172327 100%);
+}
+
+.prototype-shell {
+  width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.prototype-stage {
+  position: relative;
+  width: min(100%, 1100px);
+  aspect-ratio: 960 / 680;
+  max-height: calc(100vh - 36px);
+  display: grid;
+  place-items: center;
+}
+
+#repair-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(247, 235, 207, 0.2);
+  border-radius: 8px;
+  background: #223238;
+  box-shadow: 0 24px 60px rgba(4, 10, 11, 0.38);
+}
+
+.prototype-actions {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  gap: 10px;
+}
+
+.prototype-actions button,
+.prototype-actions a {
+  min-width: 74px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(248, 237, 207, 0.4);
+  border-radius: 8px;
+  background: rgba(16, 29, 32, 0.7);
+  color: #f8edcf;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.prototype-actions button:hover,
+.prototype-actions a:hover,
+.prototype-actions button:focus-visible,
+.prototype-actions a:focus-visible {
+  background: rgba(69, 57, 34, 0.86);
+  outline: 2px solid rgba(255, 216, 135, 0.72);
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) and (orientation: portrait) {
+  body {
+    overflow: auto;
+  }
+
+  .prototype-shell {
+    place-items: start center;
+    padding: 10px;
+  }
+
+  .prototype-stage {
+    width: 100%;
+    max-height: none;
+  }
+
+  .prototype-actions {
+    right: 12px;
+    bottom: 12px;
+  }
+}

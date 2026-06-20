@@ -1,0 +1,134 @@
+Use this document as a guide to keep us on track. Ask me 25 questions about the project so we can fine tune it. Put the answers in here and we'll use this document to reference throughout the project.
+
+Project Brief - 25 Questions
+
+1. What kind of 2D side-scrolling game should we make?
+Recommended answer: A. Cozy adventure platformer with exploration, light puzzles, and a charming character story.
+User answer: A. Cozy adventure platformer with exploration, light puzzles, and a charming character story.
+Notes: This gives us a friendly, approachable game direction that fits the AI-generated storybook asset workflow from the video. It also keeps the first version achievable: exploration, simple puzzles, and character charm can work before we add complex combat or systems.
+
+2. What should the main character be?
+Recommended answer: A. A curious kid explorer with a small magical companion.
+User answer: D. A young inventor with gadgets and tools.
+Notes: A young inventor is a strong fit for a cozy adventure platformer because gadgets can naturally become movement abilities, puzzle tools, collectibles, and upgrade rewards. The art direction should make the character readable in side view: distinctive hair or hat, small backpack/tool belt, and one signature gadget silhouette.
+
+3. What should the game world feel like?
+Recommended answer: A. Whimsical forest village with handmade machines and nature reclaiming old inventions.
+User answer: A. Whimsical forest village with handmade machines and nature reclaiming old inventions.
+Notes: This gives the game a clear visual identity: warm forest paths, cozy village details, mossy old devices, wooden platforms, gears, vines, lamps, bridges, and small mechanical puzzle objects. It also matches the video workflow well because we can request cohesive character, environment, parallax, tile, prop, and animation assets in one hand-drawn storybook style.
+
+4. What should be the main goal of the first playable version?
+Recommended answer: A. Explore a small forest village level, collect missing machine parts, and repair one broken invention.
+User answer: A. Explore a small forest village level, collect missing machine parts, and repair one broken invention.
+Notes: The first playable version should have a simple, complete objective loop: move through a small area, find several machine parts, bring them to a broken invention, and trigger a visible repair moment. This is achievable for a first build and gives the player a clear sense of purpose without requiring combat, complex story, or a large map.
+
+5. What should the broken invention be?
+Recommended answer: A. A village water wheel generator that powers lights and opens a path.
+User answer: A. A village water wheel generator that powers lights and opens a path.
+Notes: The water wheel generator is a strong centerpiece for the first level because it is visually clear, fits the forest village setting, and creates an obvious before-and-after payoff. Repairing it can turn on warm village lights, animate the wheel, play a satisfying sound, and open a simple gate or bridge to mark completion.
+
+6. What should the player collect to repair the water wheel generator?
+Recommended answer: A. Three missing gear pieces, one copper coil, and one glowing seed battery.
+User answer: A. Three missing gear pieces, one copper coil, and one glowing seed battery.
+Notes: This set gives the first quest five readable collectibles with different shapes and colors. The three gear pieces can teach collection basics, while the copper coil and glowing seed battery can feel like more special finds placed behind light exploration or puzzle moments.
+
+7. What should the main movement feel like?
+Recommended answer: A. Gentle platforming: walk, jump, climb small ledges, and use a simple gadget boost.
+User answer: A. Gentle platforming: walk, jump, climb small ledges, and use a simple gadget boost.
+Notes: Movement should feel friendly and forgiving. The first version should prioritize readable walking, jumping, ledge-friendly level design, and one simple gadget boost rather than advanced platforming. This supports cozy exploration while still giving the inventor identity a mechanical role.
+
+8. What should the inventor's first gadget do?
+Recommended answer: A. A spring-boot boost that gives a short upward hop to reach slightly higher platforms.
+User answer: C. A lantern that reveals hidden paths and activates glow plants.
+Notes: The lantern shifts the first gadget toward exploration and gentle puzzle-solving instead of movement complexity. It can reveal hidden platforms, wake glow plants, light village lamps, and interact naturally with the repaired water wheel generator. The character design should include a readable lantern device, possibly handmade from brass, glass, and a small glowing seed core.
+
+9. How should puzzles work in the first level?
+Recommended answer: A. Use the lantern to reveal hidden platforms, activate glow plants, and find repair parts.
+User answer: A. Use the lantern to reveal hidden platforms, activate glow plants, and find repair parts.
+Notes: The first level's puzzles should teach one clear rule: light changes the world. The lantern can reveal hidden paths, make glow plants unfold into platforms, highlight collectible machine parts, and turn on small lamps. This avoids overloading the player with unrelated mechanics.
+
+10. Should the game have enemies or danger in the first version?
+Recommended answer: A. No enemies; use harmless obstacles like water, thorns, darkness, and blocked paths.
+User answer: A. No enemies; use harmless obstacles like water, thorns, darkness, and blocked paths.
+Notes: The first version should stay non-combat and low-stress. Challenge should come from exploration, gentle platforming, lantern-based discovery, and small environmental barriers. This supports the cozy adventure tone and keeps development focused on movement, collection, repair, and atmosphere.
+
+11. What visual art style should we aim for?
+Recommended answer: A. Whimsical hand-drawn storybook style with soft colors, clean silhouettes, and cozy detail.
+User answer: A. Whimsical hand-drawn storybook style with soft colors, clean silhouettes, and cozy detail.
+Notes: The game should use a cohesive hand-drawn storybook look, matching the workflow described in the video transcript. Assets should have soft colors, readable shapes, gentle outlines, and enough cozy detail to feel crafted without becoming visually noisy during platforming.
+
+12. What should the main character look like?
+Recommended answer: A. A young inventor with messy hair, oversized goggles, a patched jacket, tool belt, backpack, and brass lantern gadget.
+User answer: B. A neat apprentice engineer with a cap, overalls, and a polished tool kit.
+Notes: The character should feel tidy, capable, and apprentice-like rather than chaotic. Key visual markers: engineer cap, practical overalls, polished tool kit, and a lantern gadget that looks intentionally built. The silhouette should stay simple enough for side-scrolling animation.
+
+13. Should the main character have a companion?
+Recommended answer: A. Yes, a tiny floating light-sprite that reacts to the lantern and points toward secrets.
+User answer: Revised: A cute floating AI companion robot.
+Notes: The companion should be a cute floating AI robot that supports the apprentice engineer theme. It can react to the lantern, scan for hidden paths, glow or beep near secrets, point toward repair parts, and add personality without requiring complex companion controls. Visually, it should feel friendly and handmade, with a small round body, expressive screen or eye, tiny antenna, and soft glow.
+
+14. What should the first level layout be like?
+Recommended answer: A. One connected forest village path with a few branches, hidden nooks, and a water wheel at the end.
+User answer: A. One connected forest village path with a few branches, hidden nooks, and a water wheel at the end.
+Notes: The first level should be a single connected side-scrolling path with light branching. The main route should guide the player toward the water wheel generator, while side nooks hide repair parts, lantern interactions, and small scenic rewards. This layout is easier to build and test than a full hub while still feeling exploratory.
+
+15. How should the story begin?
+Recommended answer: A. The village generator fails at dusk, the lights go out, and the young apprentice sets out with their robot to find the missing parts.
+User answer: B. The inventor wakes up after a storm and discovers pieces of their machine scattered around. The user especially likes heavy storms.
+Notes: The opening should lean into heavy storm atmosphere: rain against windows, wind through trees, puddles, fallen branches, flickering lamps, and the water wheel generator damaged overnight. The apprentice and floating AI robot begin after the storm, discovering that key repair parts were scattered across the forest village. This gives the first level an emotional setup and a clear reason to explore.
+
+Revision to Character Direction: The main character should feel like a little civil engineer, focused on repairing practical village infrastructure such as the water wheel generator, bridges, paths, lamps, and small machines. The game should allow the player to choose between a more masculine-presenting or more feminine-presenting version of the apprentice engineer while keeping the same core outfit, role, abilities, and story.
+
+16. What should the mood be during gameplay?
+Recommended answer: A. Calm after the storm: damp forest, soft light, gentle mystery, and cozy recovery.
+User answer: A. Calm after the storm: damp forest, soft light, gentle mystery, and cozy recovery.
+Notes: Gameplay should feel like the quiet aftermath of a heavy storm. The world can show wet leaves, puddles, broken branches, soft mist, muted sunlight, and flickering village lamps. The emotional tone is not panic; it is gentle repair, discovery, and helping the village recover.
+
+17. What should the player choice between masculine/feminine character versions affect?
+Recommended answer: A. Appearance only: same story, same abilities, same animations where possible.
+User answer: A. Appearance only: same story, same abilities, same animations where possible.
+Notes: Character choice should be cosmetic only. Both versions are the same apprentice civil engineer with the same lantern gadget, AI robot companion, movement, story, and goals. This keeps production manageable while letting players choose the character presentation they prefer.
+
+18. What should the AI companion robot mainly do?
+Recommended answer: A. Give gentle hints, react emotionally, scan hidden areas, and guide the player toward repair parts.
+User answer: A. Give gentle hints, react emotionally, scan hidden areas, and guide the player toward repair parts.
+Notes: The floating AI robot should support the player through light guidance, not direct control. It can pulse, chirp, display small expressions, scan suspicious areas, point toward nearby repair parts, and react to important discoveries. This keeps the companion useful, cute, and connected to the lantern/exploration loop.
+
+19. How should the first playable version end?
+Recommended answer: A. The player repairs the water wheel, village lights turn on, a gate opens, and the robot celebrates.
+User answer: A. The player repairs the water wheel, village lights turn on, a gate opens, and the robot celebrates.
+Notes: The first playable version should end with a visible, satisfying transformation. After the final repair part is installed, the water wheel begins spinning, warm lights turn on across the village, a gate or path opens, and the AI robot celebrates with an expressive animation. This creates a clear completion moment and a natural teaser for the next area.
+
+20. What should the controls be for the first version?
+Recommended answer: A. Keyboard: arrow keys or WASD to move, Space to jump, E to interact, F to use lantern.
+User answer: A. Keyboard: arrow keys or WASD to move, Space to jump, E to interact, F to use lantern.
+Notes: First-version controls should be familiar and simple: arrow keys or WASD for movement, Space for jump, E for interacting with repair spots or objects, and F for the lantern. This keeps the game easy to test on desktop and supports the lantern mechanic as a deliberate action.
+
+21. What platform should we build for first?
+Recommended answer: A. A browser-playable game using HTML, CSS, and JavaScript so it opens easily on this computer.
+User answer: A. A browser-playable game using HTML, CSS, and JavaScript so it opens easily on this computer.
+Notes: The first build should be a browser-playable HTML/CSS/JavaScript game. This makes it easy to open, test, revise, and share without installing a game engine. It also matches a lightweight prototype approach before deciding whether to move into a larger engine later.
+
+22. How should we handle art assets for the first playable version?
+Recommended answer: A. Start with simple hand-drawn-style placeholder shapes in code, then replace them with AI-generated PNG assets later.
+User answer: A. Start with simple hand-drawn-style placeholder shapes in code, then replace them with AI-generated PNG assets later.
+Notes: The first playable version should use simple hand-drawn-style placeholder shapes directly in code so we can validate movement, collection, lantern interactions, repair flow, and level layout quickly. Once the prototype feels good, the AI asset workflow from the video can be used to replace placeholders with cohesive PNG characters, props, tiles, backgrounds, and animations.
+
+23. What should be included in the first prototype?
+Recommended answer: A. One playable level, character selection, movement, lantern reveal, collectibles, water wheel repair, ending moment.
+User answer: D. A visual mockup first, with no gameplay.
+Notes: Start small with a visual mockup before building gameplay. The first deliverable should establish the look and composition: the apprentice civil engineer, optional character presentation concept, floating AI companion robot, post-storm forest village, damaged water wheel generator, lantern mood, and cozy storybook art direction. Once the visual direction feels right, we can turn it into a playable browser prototype.
+
+24. What should the game be called for now?
+Recommended answer: A. Stormlight Village.
+User answer: A. Stormlight Village.
+Notes: Stormlight Village works well as a working title because it combines the heavy-storm setup, the lantern/light mechanic, and the cozy village repair theme. It is clear, memorable, and flexible enough for either a visual mockup or a later playable prototype.
+
+25. What should I make first after this planning file is complete?
+Recommended answer: A. A single browser-based visual mockup scene for Stormlight Village, with no gameplay yet.
+User answer: A. A single browser-based visual mockup scene for Stormlight Village, with no gameplay yet.
+Notes: The next deliverable should be a single browser-based visual mockup scene, not gameplay. It should establish the look of Stormlight Village after a heavy storm: damp forest village, damaged water wheel generator, young apprentice civil engineer, cute floating AI companion robot, lantern glow, soft post-storm mood, and storybook visual style.
+
+Development Structure Note
+User recommendation: Write the code for expansion, using modules or clear sections.
+Codex notes: I agree. Even though the first deliverable is only a visual mockup, the code should be structured like the seed of a real browser game. Recommended structure: index.html for the page shell, styles.css for layout and presentation, src/main.js to start the app, src/config.js for title/canvas/tuning values, src/scene.js for the Stormlight Village scene definition, src/render.js for drawing functions, src/entities/ for character/robot/water wheel/props, and assets/ for future PNGs, animations, and sounds. Use plain browser JavaScript and canvas at first, but organize it with modules from day one so the project can grow into gameplay later without a rewrite. Add a short README.md with the concept and how to run/open the mockup.
