@@ -1,6 +1,6 @@
 # Chunk 13 - Puzzle Progression
 
-Status: Drafted
+Status: First pass implemented
 
 Goal: Define how repair puzzles become gradually harder from scene to scene.
 
@@ -94,3 +94,26 @@ Each completed puzzle should visibly improve the scene:
 ## Notes
 
 Harder should mean more interesting, not more punishing. The player should always feel like a thoughtful repair apprentice, not like they are being tested under pressure.
+
+## Implemented First Pass
+
+The puzzle system now supports scene-specific 3-by-3 layouts, multiple output nodes, and a tee/splitter tile.
+
+Shortest solution lengths by theme:
+
+| Scene | Theme | Shortest solution |
+| --- | --- | --- |
+| Stormlight Village | `lantern-circuit` | 1 rotation |
+| Glowfen Grove | `glow-bridge` | 5 rotations |
+| Mossline Switchyard | `junction-line` | 7 rotations |
+| Stormedge Rise | `storm-gauge` | 5 rotations |
+| Beacon Hill | `beacon-signal` | 7 rotations |
+| Rainbarrel Row | `water-routing` | 6 rotations |
+
+This keeps the first repair very approachable while giving later scenes more distinct shapes:
+
+- Glowfen Grove branches to two glow endpoints.
+- Mossline Switchyard uses a snaking junction route.
+- Stormedge Rise is a brisk weather-gauge line.
+- Beacon Hill branches the repaired signal to two endpoints.
+- Rainbarrel Row splits stormwater into two safe runoff channels.

@@ -10,7 +10,9 @@ const TILE_CONNECTIONS = {
   output: ["left"],
   blank: [],
   line: ["left", "right"],
-  turn: ["right", "down"]
+  turn: ["right", "down"],
+  tee: ["left", "right", "down"],
+  cross: ["up", "right", "down", "left"]
 };
 
 const DEFAULT_THEME = {
@@ -101,30 +103,67 @@ const PUZZLE_THEMES = {
   }
 };
 
-export function createRepairPuzzle(themeId = "lantern-circuit") {
-  return {
-    rows: 3,
-    cols: 3,
-    theme: createPuzzleTheme(themeId),
+const PUZZLE_LAYOUTS = {
+  "lantern-circuit": {
     selected: { row: 0, col: 1 },
-    completed: false,
     tiles: [
-      [
-        tile("start", 0, true),
-        tile("turn", 2),
-        tile("blank", 0, true)
-      ],
-      [
-        tile("blank", 0, true),
-        tile("line", 0),
-        tile("blank", 0, true)
-      ],
-      [
-        tile("blank", 0, true),
-        tile("turn", 1),
-        tile("output", 0, true)
-      ]
-    ],
+      [tile("start", 0, true), tile("line", 1), tile("output", 0, true)],
+      [tile("blank", 0, true), tile("blank", 0, true), tile("blank", 0, true)],
+      [tile("blank", 0, true), tile("blank", 0, true), tile("blank", 0, true)]
+    ]
+  },
+  "glow-bridge": {
+    selected: { row: 0, col: 1 },
+    tiles: [
+      [tile("start", 0, true), tile("tee", 2), tile("output", 0, true)],
+      [tile("blank", 0, true), tile("line", 0), tile("blank", 0, true)],
+      [tile("blank", 0, true), tile("turn", 1), tile("output", 0, true)]
+    ]
+  },
+  "junction-line": {
+    selected: { row: 0, col: 1 },
+    tiles: [
+      [tile("start", 0, true), tile("turn", 2), tile("blank", 0, true)],
+      [tile("blank", 0, true), tile("turn", 1), tile("turn", 3)],
+      [tile("blank", 0, true), tile("line", 0), tile("output", 1, true)]
+    ]
+  },
+  "storm-gauge": {
+    selected: { row: 0, col: 1 },
+    tiles: [
+      [tile("start", 0, true), tile("line", 1), tile("turn", 2)],
+      [tile("blank", 0, true), tile("line", 0), tile("line", 0)],
+      [tile("blank", 0, true), tile("blank", 0, true), tile("output", 1, true)]
+    ]
+  },
+  "beacon-signal": {
+    selected: { row: 0, col: 1 },
+    tiles: [
+      [tile("start", 0, true), tile("turn", 2), tile("blank", 0, true)],
+      [tile("blank", 0, true), tile("line", 0), tile("blank", 0, true)],
+      [tile("output", 2, true), tile("tee", 3), tile("output", 0, true)]
+    ]
+  },
+  "water-routing": {
+    selected: { row: 0, col: 1 },
+    tiles: [
+      [tile("start", 0, true), tile("turn", 2), tile("blank", 0, true)],
+      [tile("output", 2, true), tile("tee", 3), tile("output", 0, true)],
+      [tile("blank", 0, true), tile("blank", 0, true), tile("blank", 0, true)]
+    ]
+  }
+};
+
+export function createRepairPuzzle(themeId = "lantern-circuit") {
+  const layout = createPuzzleLayout(themeId);
+
+  return {
+    rows: layout.tiles.length,
+    cols: layout.tiles[0].length,
+    theme: createPuzzleTheme(themeId),
+    selected: { ...layout.selected },
+    completed: false,
+    tiles: cloneTiles(layout.tiles),
     connected: new Set()
   };
 }
@@ -139,6 +178,14 @@ function createPuzzleTheme(themeId) {
       ...theme.colors
     }
   };
+}
+
+function createPuzzleLayout(themeId) {
+  return PUZZLE_LAYOUTS[themeId] || PUZZLE_LAYOUTS[DEFAULT_THEME.id];
+}
+
+function cloneTiles(rows) {
+  return rows.map((row) => row.map((source) => ({ ...source })));
 }
 
 export function moveSelection(puzzle, rowDelta, colDelta) {
@@ -202,7 +249,7 @@ export function updateConnections(puzzle) {
   }
 
   puzzle.connected = connected;
-  puzzle.completed = connected.has(tileKey(2, 2));
+  puzzle.completed = getOutputKeys(puzzle).every((key) => connected.has(key));
   return puzzle.completed;
 }
 
@@ -225,6 +272,20 @@ export function tileKey(row, col) {
 
 function tile(type, rotation = 0, locked = false) {
   return { type, rotation, locked };
+}
+
+function getOutputKeys(puzzle) {
+  const outputs = [];
+
+  for (let row = 0; row < puzzle.rows; row += 1) {
+    for (let col = 0; col < puzzle.cols; col += 1) {
+      if (getTile(puzzle, row, col)?.type === "output") {
+        outputs.push(tileKey(row, col));
+      }
+    }
+  }
+
+  return outputs;
 }
 
 function rotateDirection(direction, rotation) {

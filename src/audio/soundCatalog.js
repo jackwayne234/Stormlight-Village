@@ -1,8 +1,13 @@
 export const soundCatalog = {
+  "weather.rain.loop": {
+    generated: "steadyRainLoop",
+    bus: "ambience",
+    volume: 0.46
+  },
   "weather.thunder.roll": {
     files: ["./assets/audio/weather/rolling-thunder-pixabay.mp3"],
     bus: "weather",
-    volume: 0.72,
+    volume: 0.62,
     cooldown: 8,
     restart: false
   },
@@ -11,6 +16,30 @@ export const soundCatalog = {
     bus: "weather",
     volume: 0.24,
     cooldown: 8
+  },
+  "weather.transition.thunder": {
+    generated: "lowThunder",
+    bus: "weather",
+    volume: 0.24,
+    cooldown: 1.4
+  },
+  "ui.scan.chirp": {
+    generated: "robotChirp",
+    bus: "robot",
+    volume: 0.34,
+    cooldown: 0.35
+  },
+  "ui.repair.success": {
+    generated: "successChime",
+    bus: "machines",
+    volume: 0.58,
+    cooldown: 0.8
+  },
+  "ui.puzzle.rotate": {
+    generated: "tileClick",
+    bus: "ui",
+    volume: 0.26,
+    cooldown: 0.04
   }
 };
 

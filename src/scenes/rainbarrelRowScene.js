@@ -101,6 +101,22 @@ export function createRainbarrelRowScene() {
     completeEffect: "rainbarrel-drain-clear",
     completeMessage: "Stormwater redirected. Chapter repairs complete.",
     continueMessage: "Stormwater redirected. Press Space to enjoy the view.",
+    chapterComplete: {
+      eyebrow: "Chapter Complete",
+      title: "The village lights hold through the rain",
+      summary:
+        "Water is moving safely again, the storm-watch line is awake, and every repair has left Stormlight Village a little warmer.",
+      repairs: [
+        "Water wheel generator restored",
+        "Glowfen bridge relit",
+        "Switchyard junction online",
+        "Storm gauge calibrated",
+        "Beacon signal shining",
+        "Rainbarrel runoff redirected"
+      ],
+      robotNote: "Route stable. The village is ready for the next storm.",
+      prompt: "Press Space to return to the lane."
+    },
     reactions: [
       { text: "No more water at the door!", x: 740, y: 318 },
       { text: "The barrels are behaving again!", x: 1540, y: 326 },

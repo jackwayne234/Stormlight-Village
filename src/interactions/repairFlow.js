@@ -1,4 +1,3 @@
-import { getScenePage } from "../game/sceneSequence.js";
 import {
   createRepairPuzzle,
   moveSelection,
@@ -10,16 +9,19 @@ import { createRepairPuzzleRenderer } from "../puzzles/repairPuzzleRenderer.js";
 import { applyRepairEffect } from "../repairs/repairEffects.js";
 import { createRepairReactions } from "../repairs/repairReactions.js";
 
-export function createRepairFlow({ scene, player }) {
+export function createRepairFlow({ scene, player, audioManager = null, onSceneComplete = () => {} }) {
   const ui = createRepairUi();
   let puzzle = null;
   let renderer = null;
   let open = false;
   let completed = isRepairComplete(scene);
   let completionHandled = false;
+  let puzzleCompleteReadyAt = 0;
   let awaitingContinue = false;
   let continueReadyAt = 0;
   let continueReady = false;
+  let celebrationBubblesFadeAt = 0;
+  let chapterCardVisible = false;
   let celebrationBubbles = [];
   let guidanceDismissed = completed;
   let guidanceVisible = false;
@@ -43,6 +45,9 @@ export function createRepairFlow({ scene, player }) {
     if (open) {
       renderer.render(time);
       if (puzzle.completed && !completionHandled) {
+        startPuzzleCompleteHold(time);
+      }
+      if (completionHandled && time >= puzzleCompleteReadyAt) {
         completeRepair(time);
       }
       return;
@@ -81,6 +86,7 @@ export function createRepairFlow({ scene, player }) {
     scanning = true;
     scanStartedAt = time;
     scanReadyAt = time + 0.72;
+    playCue("ui.scan.chirp");
     hideGuidance();
     ui.prompt.hidden = false;
     ui.prompt.textContent = `${scene.repairTarget.prompt} Analyzing repair...`;
@@ -114,6 +120,7 @@ export function createRepairFlow({ scene, player }) {
     open = true;
     scanning = false;
     completionHandled = false;
+    puzzleCompleteReadyAt = 0;
     puzzle = createRepairPuzzle(scene.repairTarget.puzzleTheme);
     updateConnections(puzzle);
     renderer = createRepairPuzzleRenderer(ui.canvas, puzzle);
@@ -130,9 +137,15 @@ export function createRepairFlow({ scene, player }) {
     ui.overlay.hidden = true;
   }
 
+  function startPuzzleCompleteHold(time) {
+    completionHandled = true;
+    puzzleCompleteReadyAt = time + 1.35;
+    ui.status.textContent = "Repair complete";
+    playCue("ui.repair.success");
+  }
+
   function completeRepair(time) {
     completed = true;
-    completionHandled = true;
     localStorage.setItem(progressKey(scene), "true");
     applyRepairEffect(scene);
     closePuzzle();
@@ -141,7 +154,8 @@ export function createRepairFlow({ scene, player }) {
 
   function startCelebration(time) {
     awaitingContinue = true;
-    continueReadyAt = time + 4.5;
+    continueReadyAt = time + 2.75;
+    celebrationBubblesFadeAt = time + 2.45;
     continueReady = false;
     hideGuidance();
     ui.scan.hidden = true;
@@ -154,6 +168,10 @@ export function createRepairFlow({ scene, player }) {
   function updateCelebration(time) {
     positionCelebrationBubbles(scene, ui.celebration, celebrationBubbles);
 
+    if (time >= celebrationBubblesFadeAt) {
+      ui.celebration.classList.add("repair-celebration-fading");
+    }
+
     if (time >= continueReadyAt) {
       continueReady = true;
       ui.prompt.hidden = false;
@@ -161,6 +179,8 @@ export function createRepairFlow({ scene, player }) {
         ? scene.repairTarget.continueMessage
         : scene.repairTarget.nextScene
         ? "Repair complete. Press Space or walk right to continue."
+        : getChapterComplete(scene)
+        ? getChapterComplete(scene).prompt || "Chapter complete. Press Space to continue."
         : "Repair complete. Press Space to enjoy the view.";
     }
   }
@@ -177,7 +197,13 @@ export function createRepairFlow({ scene, player }) {
 
     const nextScene = scene.repairTarget.nextScene;
     if (nextScene) {
-      window.location.href = getScenePage(nextScene);
+      onSceneComplete(nextScene);
+      return;
+    }
+
+    if (getChapterComplete(scene)) {
+      showChapterComplete(scene, ui.chapter);
+      chapterCardVisible = true;
     }
   }
 
@@ -218,6 +244,17 @@ export function createRepairFlow({ scene, player }) {
   function handleKeyDown(event) {
     const key = event.key.toLowerCase();
 
+    if (chapterCardVisible) {
+      const closeKeys = [" ", "enter", "e", "escape"];
+
+      if (closeKeys.includes(key)) {
+        event.preventDefault();
+        hideChapterComplete(ui.chapter);
+        chapterCardVisible = false;
+      }
+      return;
+    }
+
     if (awaitingContinue) {
       const continueKeys = [" ", "enter", "e", "arrowright", "d"];
 
@@ -237,6 +274,11 @@ export function createRepairFlow({ scene, player }) {
       return;
     }
 
+    if (completionHandled) {
+      event.preventDefault();
+      return;
+    }
+
     const handledKeys = ["arrowup", "w", "arrowright", "d", "arrowdown", "s", "arrowleft", "a", " ", "e", "escape"];
     if (!handledKeys.includes(key)) {
       return;
@@ -248,7 +290,10 @@ export function createRepairFlow({ scene, player }) {
     if (key === "arrowright" || key === "d") moveSelection(puzzle, 0, 1);
     if (key === "arrowdown" || key === "s") moveSelection(puzzle, 1, 0);
     if (key === "arrowleft" || key === "a") moveSelection(puzzle, 0, -1);
-    if (key === " " || key === "e") rotateSelectedTile(puzzle);
+    if (key === " " || key === "e") {
+      rotateSelectedTile(puzzle);
+      playCue("ui.puzzle.rotate");
+    }
   }
 
   function handlePointerDown(event) {
@@ -263,14 +308,36 @@ export function createRepairFlow({ scene, player }) {
 
     if (point) {
       rotateTileAt(puzzle, point.row, point.col);
+      playCue("ui.puzzle.rotate");
     }
+  }
+
+  function playCue(soundId) {
+    audioManager?.play(soundId).catch(() => {});
+  }
+
+  function handleResize() {
+    renderer?.resizeForDisplay();
+  }
+
+  function destroy() {
+    window.removeEventListener("keydown", handleKeyDown);
+    ui.canvas.removeEventListener("pointerdown", handlePointerDown);
+    window.removeEventListener("resize", handleResize);
+    ui.prompt.remove();
+    ui.overlay.remove();
+    ui.celebration.remove();
+    ui.guidance.remove();
+    ui.scan.remove();
+    ui.chapter.remove();
   }
 
   window.addEventListener("keydown", handleKeyDown);
   ui.canvas.addEventListener("pointerdown", handlePointerDown);
-  window.addEventListener("resize", () => renderer?.resizeForDisplay());
+  window.addEventListener("resize", handleResize);
 
   return {
+    destroy,
     isOpen,
     update
   };
@@ -298,6 +365,10 @@ function createRepairUi() {
   celebration.className = "repair-celebration";
   celebration.hidden = true;
 
+  const chapter = document.createElement("div");
+  chapter.className = "chapter-complete";
+  chapter.hidden = true;
+
   const guidance = document.createElement("div");
   guidance.className = "repair-guidance repair-bubble repair-bubble-robot";
   guidance.hidden = true;
@@ -307,9 +378,9 @@ function createRepairUi() {
   scan.hidden = true;
 
   overlay.append(canvas, status);
-  document.querySelector(".app-shell").append(prompt, overlay, celebration, guidance, scan);
+  document.querySelector(".app-shell").append(prompt, overlay, celebration, guidance, scan, chapter);
 
-  return { canvas, celebration, guidance, overlay, prompt, scan, status };
+  return { canvas, celebration, chapter, guidance, overlay, prompt, scan, status };
 }
 
 function isNearRepairTarget(scene, player) {
@@ -327,6 +398,7 @@ function progressKey(scene) {
 
 function createCelebrationBubbles(scene, celebration) {
   celebration.replaceChildren();
+  celebration.classList.remove("repair-celebration-fading");
 
   const reactions = createRepairReactions(scene);
   return reactions.map((reaction, index) => {
@@ -374,4 +446,42 @@ function positionScan(scene, element, age) {
   element.style.width = `${size}px`;
   element.style.height = `${size * 0.45}px`;
   element.style.setProperty("--scan-progress", Math.min(age / 0.72, 1));
+}
+
+function getChapterComplete(scene) {
+  return scene.repairTarget?.chapterComplete || null;
+}
+
+function showChapterComplete(scene, element) {
+  const chapter = getChapterComplete(scene);
+  if (!chapter) {
+    return;
+  }
+
+  const repairs = (chapter.repairs || [])
+    .map((repair) => `<li>${escapeHtml(repair)}</li>`)
+    .join("");
+
+  element.innerHTML = `
+    <article class="chapter-complete-card" role="dialog" aria-modal="true" aria-labelledby="chapter-complete-title">
+      <p class="chapter-complete-eyebrow">${escapeHtml(chapter.eyebrow || "Chapter Complete")}</p>
+      <h2 id="chapter-complete-title">${escapeHtml(chapter.title || scene.title)}</h2>
+      <p class="chapter-complete-summary">${escapeHtml(chapter.summary || "Repairs complete.")}</p>
+      <ul class="chapter-complete-list">${repairs}</ul>
+      <p class="chapter-complete-robot">${escapeHtml(chapter.robotNote || "")}</p>
+      <p class="chapter-complete-prompt">${escapeHtml(chapter.prompt || "Press Space to continue.")}</p>
+    </article>
+  `;
+  element.hidden = false;
+}
+
+function hideChapterComplete(element) {
+  element.hidden = true;
+  element.replaceChildren();
+}
+
+function escapeHtml(value) {
+  const container = document.createElement("span");
+  container.textContent = value;
+  return container.innerHTML;
 }

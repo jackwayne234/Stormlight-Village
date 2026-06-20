@@ -1,13 +1,27 @@
-export function createWeatherAudio(scene, audioManager) {
+export function createWeatherAudio(getScene, audioManager) {
   let lastStrikeKey = "";
+  let entranceThunderPlayed = false;
 
-  function setEnabled(enabled) {
-    if (!enabled) {
+  function start() {
+    try {
+      audioManager.unlock();
+      audioManager.play("weather.rain.loop").catch(() => {});
+      playEntranceThunder();
+    } catch {
+      // Audio is nice to have; rendering should never depend on browser playback permission.
+    }
+  }
+
+  function playEntranceThunder() {
+    if (entranceThunderPlayed) {
       return;
     }
 
-    audioManager.unlock();
-    audioManager.play("weather.thunder.roll");
+    entranceThunderPlayed = true;
+    audioManager.play("weather.thunder.roll", {
+      fallbackId: "weather.thunder.fallback",
+      volume: 0.9
+    }).catch(() => {});
   }
 
   function update(time) {
@@ -15,22 +29,28 @@ export function createWeatherAudio(scene, audioManager) {
       return;
     }
 
+    const scene = getScene();
     const strike = scene.weather.lightning.activeStrike;
     if (!strike) {
       return;
     }
 
     const age = time - strike.startTime;
-    const strikeKey = String(strike.id);
+    const strikeKey = `${scene.id}:${strike.id}`;
 
-    if (age > 0.55 && age < 0.7 && strikeKey !== lastStrikeKey) {
+    if (entranceThunderPlayed && !lastStrikeKey) {
       lastStrikeKey = strikeKey;
-      audioManager.play("weather.thunder.roll");
+      return;
+    }
+
+    if (age > 0.32 && age < 0.55 && strikeKey !== lastStrikeKey) {
+      lastStrikeKey = strikeKey;
+      audioManager.play("weather.thunder.roll").catch(() => {});
     }
   }
 
   return {
-    setEnabled,
+    start,
     update
   };
 }
