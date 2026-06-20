@@ -43,4 +43,4 @@ This scene keeps the civil-engineer theme cozy and practical: the player is not 
 - Open directly: `http://localhost:5174/rainbarrel-row.html`
 - Quick test: `http://localhost:5174/rainbarrel-row.html?resetProgress=1&startAtRepair=1`
 
-Rainbarrel Row now sits in the main route after Stormlight Village and before Glowfen Grove.
+Rainbarrel Row now sits in the main route after Beacon Hill as Scene 06.

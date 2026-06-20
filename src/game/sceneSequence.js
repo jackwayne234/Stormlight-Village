@@ -1,11 +1,7 @@
 export const sceneSequence = {
   village: {
-    nextScene: "rainbarrel-row",
-    page: "./index.html"
-  },
-  "rainbarrel-row": {
     nextScene: "glow-grove",
-    page: "./rainbarrel-row.html"
+    page: "./index.html"
   },
   "glow-grove": {
     nextScene: "mossline-switchyard",
@@ -20,8 +16,12 @@ export const sceneSequence = {
     page: "./stormedge-rise.html"
   },
   "beacon-hill": {
-    nextScene: null,
+    nextScene: "rainbarrel-row",
     page: "./beacon-hill.html"
+  },
+  "rainbarrel-row": {
+    nextScene: null,
+    page: "./rainbarrel-row.html"
   }
 };
 

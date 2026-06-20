@@ -88,12 +88,12 @@ export function createBeaconHillScene() {
     guidance: "The beacon signal is weak. We're close.",
     puzzleTheme: "beacon-signal",
     completeEffect: "beacon-on",
-    completeMessage: "Beacon restored. First chapter repairs complete.",
+    completeMessage: "Beacon restored. One stormwater call remains...",
     reactions: [
       { text: "The beacon is shining!", x: 1240, y: 352 },
-      { text: "Signal restored. Chapter complete.", x: "robot", y: "robotTop", kind: "robot" }
+      { text: "Signal restored. Rainbarrel Row is next.", x: "robot", y: "robotTop", kind: "robot" }
     ],
-    nextScene: null
+    nextScene: "rainbarrel-row"
   };
 
   return scene;
