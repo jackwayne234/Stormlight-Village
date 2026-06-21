@@ -87,12 +87,22 @@ export function drawLamp(ctx, lamp, time) {
   ctx.fill();
 
   if (lamp.lit) {
-    const gradient = ctx.createRadialGradient(30, -17, 6, 30, -17, 62);
-    gradient.addColorStop(0, "rgba(255, 216, 135, 0.28)");
-    gradient.addColorStop(1, "rgba(255, 216, 135, 0)");
+    const glowPulse = 0.9 + Math.sin(time * 4.4 + lamp.x * 0.01) * 0.1;
+    const gradient = ctx.createRadialGradient(30, -17, 6, 30, -17, 96);
+    gradient.addColorStop(0, `rgba(255, 223, 145, ${0.42 * glowPulse})`);
+    gradient.addColorStop(0.36, `rgba(255, 181, 82, ${0.18 * glowPulse})`);
+    gradient.addColorStop(1, "rgba(255, 181, 82, 0)");
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(30, -17, 62, 0, Math.PI * 2);
+    ctx.arc(30, -17, 96, 0, Math.PI * 2);
+    ctx.fill();
+
+    const spill = ctx.createLinearGradient(30, 0, 30, 112);
+    spill.addColorStop(0, `rgba(255, 211, 132, ${0.16 * glowPulse})`);
+    spill.addColorStop(1, "rgba(255, 211, 132, 0)");
+    ctx.fillStyle = spill;
+    ctx.beginPath();
+    ctx.ellipse(30, 60, 42, 92, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 

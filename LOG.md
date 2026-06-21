@@ -44,6 +44,7 @@ Core visual goals:
 - The first visual slice target is Stormlight Village, with gameplay readability prioritized over exact cover fidelity.
 - The default playable apprentice should have hood down, messy hair visible, hands free, teal raincoat, brown satchel, tools, and protected/tucked plans.
 - The robot should move toward the cover design: round gray body, cyan face glow, small antenna/arms, friendly readable silhouette.
+- Background Slice v1 starts with code-native wet path and lamp glow polish before introducing painted/parallax assets.
 
 ## Current Sprite Assets
 
@@ -109,13 +110,13 @@ Asset notes:
 
 ## Suggested Next Experiment
 
-Fit-check repair/scan poses in Stormlight Village:
+Fit-check wet path and lamp glow in Stormlight Village:
 
 - Load `index.html?resetProgress=1`.
-- Walk to the water wheel and confirm the apprentice switches to the schematic pose.
-- Confirm the robot scan pose appears during scan/repair flow.
-- Confirm both return to normal after repair completion or scan cancel.
-- Tune sprite scale/offset before generating more poses.
+- Confirm the path reads wetter and more reflective without overpowering the characters.
+- Confirm lit lamps cast warmer halos and subtle road reflections.
+- Confirm darker scenes still remain readable.
+- If accepted, plan the next background slice: sky/hills parallax or water wheel/cottage props.
 
 ## How We Work
 

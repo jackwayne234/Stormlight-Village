@@ -34,7 +34,7 @@ export function renderScene(ctx, scene, time) {
   scene.background.trees.forEach((tree) => drawTree(ctx, tree, time));
   scene.background.cottages.forEach((cottage) => drawCottage(ctx, cottage, time));
   drawGround(ctx, worldWidth, height);
-  drawPath(ctx, worldWidth);
+  drawPath(ctx, worldWidth, scene.background.lamps, time);
   drawStream(ctx, time);
   drawMist(ctx, scene.weather.mistBands, time, worldWidth);
   scene.weather.puddles.forEach((puddle) => drawPuddle(ctx, puddle, time));
@@ -176,8 +176,12 @@ function drawGround(ctx, width, height) {
   ctx.fill();
 }
 
-function drawPath(ctx, width) {
-  ctx.fillStyle = colors.path;
+function drawPath(ctx, width, lamps = [], time = 0) {
+  const pathGradient = ctx.createLinearGradient(0, 560, 0, 720);
+  pathGradient.addColorStop(0, colors.path);
+  pathGradient.addColorStop(0.55, "#6c6654");
+  pathGradient.addColorStop(1, "#3f4539");
+  ctx.fillStyle = pathGradient;
   ctx.beginPath();
   ctx.moveTo(0, 676);
   ctx.bezierCurveTo(220, 626, 380, 650, 565, 632);
@@ -190,6 +194,9 @@ function drawPath(ctx, width) {
   ctx.closePath();
   ctx.fill();
 
+  drawWetStoneSegments(ctx, width, time);
+  drawPathLampReflections(ctx, lamps, time);
+
   ctx.strokeStyle = "rgba(231, 219, 176, 0.26)";
   ctx.lineWidth = 3;
   ctx.beginPath();
@@ -198,6 +205,62 @@ function drawPath(ctx, width) {
   ctx.bezierCurveTo(970, 602, 1190, 620, 1440, 584);
   ctx.bezierCurveTo(1640, 558, 1840, 626, 2075, 584);
   ctx.stroke();
+}
+
+function drawWetStoneSegments(ctx, width, time) {
+  ctx.save();
+  ctx.globalCompositeOperation = "screen";
+
+  for (let x = 120; x < width; x += 165) {
+    const y = 654 - Math.sin(x * 0.012) * 18;
+    const shimmer = 0.11 + Math.sin(time * 2.2 + x) * 0.025;
+    ctx.strokeStyle = `rgba(236, 229, 190, ${shimmer})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(x, y, 58, 12, -0.1 + Math.sin(x) * 0.04, 0.1, Math.PI - 0.1);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(32, 39, 34, 0.22)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x - 74, y + 19);
+    ctx.bezierCurveTo(x - 34, y + 6, x + 22, y + 25, x + 76, y + 8);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+function drawPathLampReflections(ctx, lamps, time) {
+  ctx.save();
+  ctx.globalCompositeOperation = "screen";
+
+  lamps
+    .filter((lamp) => lamp.lit)
+    .forEach((lamp) => {
+      const flicker = 0.88 + Math.sin(time * 4.2 + lamp.x * 0.01) * 0.12;
+      const reflection = ctx.createRadialGradient(lamp.x + 30, 650, 4, lamp.x + 30, 650, 150);
+      reflection.addColorStop(0, `rgba(255, 214, 132, ${0.2 * flicker})`);
+      reflection.addColorStop(0.45, `rgba(255, 188, 91, ${0.11 * flicker})`);
+      reflection.addColorStop(1, "rgba(255, 188, 91, 0)");
+      ctx.fillStyle = reflection;
+      ctx.beginPath();
+      ctx.ellipse(lamp.x + 34, 650, 96, 20, -0.08, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = `rgba(255, 232, 166, ${0.22 * flicker})`;
+      ctx.lineWidth = 3;
+      ctx.lineCap = "round";
+      for (let i = 0; i < 3; i += 1) {
+        const y = 636 + i * 14 + Math.sin(time * 2.5 + i + lamp.x) * 2;
+        ctx.beginPath();
+        ctx.moveTo(lamp.x - 52 + i * 12, y);
+        ctx.bezierCurveTo(lamp.x - 12, y - 6, lamp.x + 52, y + 5, lamp.x + 92, y - 3);
+        ctx.stroke();
+      }
+    });
+
+  ctx.restore();
 }
 
 function drawStream(ctx, time) {
