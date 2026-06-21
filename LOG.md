@@ -63,6 +63,17 @@ Rain-ready apprentice default pose:
 - Transparent version: `assets/sprites/characters/apprentice/apprentice-rain-ready-alpha.png`
 - Trimmed transparent version: `assets/sprites/characters/apprentice/apprentice-rain-ready-trimmed.png`
 
+Apprentice walking frames:
+
+- Frame 1 source/alpha/trimmed:
+  - `assets/sprites/characters/apprentice/apprentice-walk-1-source.png`
+  - `assets/sprites/characters/apprentice/apprentice-walk-1-alpha.png`
+  - `assets/sprites/characters/apprentice/apprentice-walk-1-trimmed.png`
+- Frame 2 source/alpha/trimmed:
+  - `assets/sprites/characters/apprentice/apprentice-walk-2-source.png`
+  - `assets/sprites/characters/apprentice/apprentice-walk-2-alpha.png`
+  - `assets/sprites/characters/apprentice/apprentice-walk-2-trimmed.png`
+
 Cover-matching robot idle pose:
 
 - Source with chroma background: `assets/sprites/characters/robot/robot-cover-idle-source.png`
@@ -81,6 +92,7 @@ Renderer integration:
 - `src/entities/robot.js` now loads the cover-matching robot sprite when available.
 - If either sprite fails to load, the old code-drawn character or robot still renders as a fallback.
 - Pose Lane v1 switches the apprentice to the schematic `inspect` pose and the robot to the cyan-beam `scan` pose during scan/repair flow.
+- Walk Cycle v1 alternates between `apprentice-walk-1-trimmed.png` and `apprentice-walk-2-trimmed.png` while the default apprentice is moving.
 
 Asset notes:
 

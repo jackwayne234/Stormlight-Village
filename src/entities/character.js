@@ -3,7 +3,11 @@ import { config } from "../config.js";
 const { colors } = config;
 const apprenticeSprites = {
   default: createSpriteImage("assets/sprites/characters/apprentice/apprentice-rain-ready-trimmed.png"),
-  inspect: createSpriteImage("assets/sprites/characters/apprentice/apprentice-schematic-trimmed.png")
+  inspect: createSpriteImage("assets/sprites/characters/apprentice/apprentice-schematic-trimmed.png"),
+  walk: [
+    createSpriteImage("assets/sprites/characters/apprentice/apprentice-walk-1-trimmed.png"),
+    createSpriteImage("assets/sprites/characters/apprentice/apprentice-walk-2-trimmed.png")
+  ]
 };
 const SPRITE_HEIGHT = 172;
 const SPRITE_GROUND_Y = 82;
@@ -18,7 +22,7 @@ export function drawCharacter(ctx, character, time) {
   ctx.scale(character.facing || 1, 1);
 
   drawShadow(ctx);
-  const sprite = getCharacterSprite(character);
+  const sprite = getCharacterSprite(character, time);
   if (sprite?.complete && sprite.naturalWidth > 0) {
     drawSpriteCharacter(ctx, sprite);
   } else {
@@ -32,12 +36,22 @@ export function drawCharacter(ctx, character, time) {
   ctx.restore();
 }
 
-function getCharacterSprite(character) {
+function getCharacterSprite(character, time) {
   if (character.pose === "inspect") {
     return apprenticeSprites.inspect;
   }
 
+  if (character.walking) {
+    const frame = Math.floor(time * 5.5) % apprenticeSprites.walk.length;
+    const walkSprite = apprenticeSprites.walk[frame];
+    return isSpriteReady(walkSprite) ? walkSprite : apprenticeSprites.default;
+  }
+
   return apprenticeSprites.default;
+}
+
+function isSpriteReady(sprite) {
+  return sprite?.complete && sprite.naturalWidth > 0;
 }
 
 function createSpriteImage(src) {
