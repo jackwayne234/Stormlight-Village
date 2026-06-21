@@ -1,8 +1,14 @@
 import { config } from "../config.js";
 
 const { colors } = config;
-const robotSprite = createSpriteImage("assets/sprites/characters/robot/robot-cover-idle-trimmed.png");
-const SPRITE_HEIGHT = 96;
+const robotSprites = {
+  idle: createSpriteImage("assets/sprites/characters/robot/robot-cover-idle-trimmed.png"),
+  scan: createSpriteImage("assets/sprites/characters/robot/robot-scan-trimmed.png")
+};
+const SPRITE_POSES = {
+  idle: { height: 96, anchorY: 0.5 },
+  scan: { height: 150, anchorY: 0.3 }
+};
 
 export function drawRobot(ctx, robot, time) {
   const hover = Math.sin(time * 2.6) * 8;
@@ -14,8 +20,9 @@ export function drawRobot(ctx, robot, time) {
   ctx.translate(x, y);
 
   drawGlow(ctx, time);
-  if (robotSprite?.complete && robotSprite.naturalWidth > 0) {
-    drawSpriteRobot(ctx, robotSprite);
+  const sprite = getRobotSprite(robot);
+  if (sprite.image?.complete && sprite.image.naturalWidth > 0) {
+    drawSpriteRobot(ctx, sprite);
   } else {
     drawBody(ctx);
     drawFace(ctx, blink);
@@ -24,6 +31,14 @@ export function drawRobot(ctx, robot, time) {
   }
 
   ctx.restore();
+}
+
+function getRobotSprite(robot) {
+  if (robot.pose === "scan") {
+    return { image: robotSprites.scan, ...SPRITE_POSES.scan };
+  }
+
+  return { image: robotSprites.idle, ...SPRITE_POSES.idle };
 }
 
 function createSpriteImage(src) {
@@ -37,10 +52,10 @@ function createSpriteImage(src) {
 }
 
 function drawSpriteRobot(ctx, sprite) {
-  const aspect = sprite.naturalWidth / sprite.naturalHeight;
-  const width = SPRITE_HEIGHT * aspect;
+  const aspect = sprite.image.naturalWidth / sprite.image.naturalHeight;
+  const width = sprite.height * aspect;
 
-  ctx.drawImage(sprite, -width * 0.5, -SPRITE_HEIGHT * 0.5, width, SPRITE_HEIGHT);
+  ctx.drawImage(sprite.image, -width * 0.5, -sprite.height * sprite.anchorY, width, sprite.height);
 }
 
 function drawGlow(ctx, time) {

@@ -84,6 +84,7 @@ export function createRepairFlow({ scene, player, audioManager = null, onSceneCo
     }
 
     scanning = true;
+    setRepairPoses(scene);
     scanStartedAt = time;
     scanReadyAt = time + 0.72;
     playCue("ui.scan.chirp");
@@ -109,6 +110,7 @@ export function createRepairFlow({ scene, player, audioManager = null, onSceneCo
 
   function cancelScan() {
     scanning = false;
+    clearRepairPoses(scene);
     ui.scan.hidden = true;
   }
 
@@ -119,6 +121,7 @@ export function createRepairFlow({ scene, player, audioManager = null, onSceneCo
 
     open = true;
     scanning = false;
+    setRepairPoses(scene);
     completionHandled = false;
     puzzleCompleteReadyAt = 0;
     puzzle = createRepairPuzzle(scene.repairTarget.puzzleTheme);
@@ -134,6 +137,7 @@ export function createRepairFlow({ scene, player, audioManager = null, onSceneCo
 
   function closePuzzle() {
     open = false;
+    clearRepairPoses(scene);
     ui.overlay.hidden = true;
   }
 
@@ -154,6 +158,7 @@ export function createRepairFlow({ scene, player, audioManager = null, onSceneCo
 
   function startCelebration(time) {
     awaitingContinue = true;
+    clearRepairPoses(scene);
     continueReadyAt = time + 2.75;
     celebrationBubblesFadeAt = time + 2.45;
     continueReady = false;
@@ -390,6 +395,16 @@ function isNearRepairTarget(scene, player) {
 
 function isRepairComplete(scene) {
   return scene.repairTarget ? localStorage.getItem(progressKey(scene)) === "true" : false;
+}
+
+function setRepairPoses(scene) {
+  scene.character.pose = "inspect";
+  scene.robot.pose = "scan";
+}
+
+function clearRepairPoses(scene) {
+  scene.character.pose = "default";
+  scene.robot.pose = "idle";
 }
 
 function progressKey(scene) {

@@ -1,7 +1,10 @@
 import { config } from "../config.js";
 
 const { colors } = config;
-const apprenticeSprite = createSpriteImage("assets/sprites/characters/apprentice/apprentice-rain-ready-trimmed.png");
+const apprenticeSprites = {
+  default: createSpriteImage("assets/sprites/characters/apprentice/apprentice-rain-ready-trimmed.png"),
+  inspect: createSpriteImage("assets/sprites/characters/apprentice/apprentice-schematic-trimmed.png")
+};
 const SPRITE_HEIGHT = 172;
 const SPRITE_GROUND_Y = 82;
 
@@ -15,8 +18,9 @@ export function drawCharacter(ctx, character, time) {
   ctx.scale(character.facing || 1, 1);
 
   drawShadow(ctx);
-  if (apprenticeSprite?.complete && apprenticeSprite.naturalWidth > 0) {
-    drawSpriteCharacter(ctx, apprenticeSprite);
+  const sprite = getCharacterSprite(character);
+  if (sprite?.complete && sprite.naturalWidth > 0) {
+    drawSpriteCharacter(ctx, sprite);
   } else {
     drawLegs(ctx, character.walking, time);
     drawBody(ctx);
@@ -26,6 +30,14 @@ export function drawCharacter(ctx, character, time) {
   }
 
   ctx.restore();
+}
+
+function getCharacterSprite(character) {
+  if (character.pose === "inspect") {
+    return apprenticeSprites.inspect;
+  }
+
+  return apprenticeSprites.default;
 }
 
 function createSpriteImage(src) {

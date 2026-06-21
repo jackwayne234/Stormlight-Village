@@ -69,11 +69,18 @@ Cover-matching robot idle pose:
 - Transparent version: `assets/sprites/characters/robot/robot-cover-idle-alpha.png`
 - Trimmed transparent version: `assets/sprites/characters/robot/robot-cover-idle-trimmed.png`
 
+Robot scan pose:
+
+- Source with chroma background: `assets/sprites/characters/robot/robot-scan-source.png`
+- Transparent version: `assets/sprites/characters/robot/robot-scan-alpha.png`
+- Trimmed transparent version: `assets/sprites/characters/robot/robot-scan-trimmed.png`
+
 Renderer integration:
 
 - `src/entities/character.js` now loads the rain-ready apprentice sprite when available.
 - `src/entities/robot.js` now loads the cover-matching robot sprite when available.
 - If either sprite fails to load, the old code-drawn character or robot still renders as a fallback.
+- Pose Lane v1 switches the apprentice to the schematic `inspect` pose and the robot to the cyan-beam `scan` pose during scan/repair flow.
 
 Asset notes:
 
@@ -90,12 +97,12 @@ Asset notes:
 
 ## Suggested Next Experiment
 
-Fit-check the new apprentice and robot in Stormlight Village:
+Fit-check repair/scan poses in Stormlight Village:
 
 - Load `index.html?resetProgress=1`.
-- Confirm the apprentice is grounded and readable at gameplay size.
-- Confirm the robot is not too large or too visually loud beside the apprentice.
-- Confirm the duo does not block repair prompts, reward bubbles, or puzzle flow.
+- Walk to the water wheel and confirm the apprentice switches to the schematic pose.
+- Confirm the robot scan pose appears during scan/repair flow.
+- Confirm both return to normal after repair completion or scan cancel.
 - Tune sprite scale/offset before generating more poses.
 
 ## How We Work
