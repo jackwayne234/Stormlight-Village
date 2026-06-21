@@ -1,6 +1,8 @@
 import { config } from "../config.js";
 
 const { colors } = config;
+const robotSprite = createSpriteImage("assets/sprites/characters/robot/robot-cover-idle-trimmed.png");
+const SPRITE_HEIGHT = 96;
 
 export function drawRobot(ctx, robot, time) {
   const hover = Math.sin(time * 2.6) * 8;
@@ -12,12 +14,33 @@ export function drawRobot(ctx, robot, time) {
   ctx.translate(x, y);
 
   drawGlow(ctx, time);
-  drawBody(ctx);
-  drawFace(ctx, blink);
-  drawAntenna(ctx, time);
-  drawTinyArms(ctx, time);
+  if (robotSprite?.complete && robotSprite.naturalWidth > 0) {
+    drawSpriteRobot(ctx, robotSprite);
+  } else {
+    drawBody(ctx);
+    drawFace(ctx, blink);
+    drawAntenna(ctx, time);
+    drawTinyArms(ctx, time);
+  }
 
   ctx.restore();
+}
+
+function createSpriteImage(src) {
+  if (typeof Image === "undefined") {
+    return null;
+  }
+
+  const image = new Image();
+  image.src = src;
+  return image;
+}
+
+function drawSpriteRobot(ctx, sprite) {
+  const aspect = sprite.naturalWidth / sprite.naturalHeight;
+  const width = SPRITE_HEIGHT * aspect;
+
+  ctx.drawImage(sprite, -width * 0.5, -SPRITE_HEIGHT * 0.5, width, SPRITE_HEIGHT);
 }
 
 function drawGlow(ctx, time) {
