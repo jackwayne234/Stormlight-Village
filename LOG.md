@@ -92,7 +92,7 @@ Renderer integration:
 - `src/entities/robot.js` now loads the cover-matching robot sprite when available.
 - If either sprite fails to load, the old code-drawn character or robot still renders as a fallback.
 - Pose Lane v1 switches the apprentice to the schematic `inspect` pose and the robot to the cyan-beam `scan` pose during scan/repair flow.
-- Walk Cycle v1 alternates between `apprentice-walk-1-trimmed.png` and `apprentice-walk-2-trimmed.png` while the default apprentice is moving.
+- Walk Cycle v1 alternates `walk-1`, standing default, `walk-2`, standing default while the apprentice is moving.
 
 Asset notes:
 

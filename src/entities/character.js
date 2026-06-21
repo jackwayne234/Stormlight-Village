@@ -42,8 +42,14 @@ function getCharacterSprite(character, time) {
   }
 
   if (character.walking) {
-    const frame = Math.floor(time * 5.5) % apprenticeSprites.walk.length;
-    const walkSprite = apprenticeSprites.walk[frame];
+    const walkSequence = [
+      apprenticeSprites.walk[0],
+      apprenticeSprites.default,
+      apprenticeSprites.walk[1],
+      apprenticeSprites.default
+    ];
+    const frame = Math.floor(time * 6.2) % walkSequence.length;
+    const walkSprite = walkSequence[frame];
     return isSpriteReady(walkSprite) ? walkSprite : apprenticeSprites.default;
   }
 
